@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from modules.helper import Helper as helper
+
 import __main__ as main
 import time
+
 
 class Logger(object):
 	def __init__(self):
@@ -33,6 +36,12 @@ class Logger(object):
 		elif messageType == 'warning':
 			color = 'orange'
 
+		log = '[ {type} ] [{time}] {message}\n'.format(
+			type = ' ' + messageType.upper() + ' ' if messageType == 'error' else messageType.upper(),
+			time = now,
+			message = message
+		)
+
 		message = '{color}[ {type} ]{reset} {gray}[{time}]{reset} {white}{message}{reset} [{file}]'.format(
 			color = colors[color],
 			type = ' ' + messageType.upper() + ' ' if messageType == 'error' else messageType.upper(),
@@ -45,6 +54,7 @@ class Logger(object):
 		)
 
 		print(message)
+		helper.createFile('logs/{time}.log'.format(time=time.strftime('%Y-%m-%d')), log)
 
 		return True
 
