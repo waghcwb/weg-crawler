@@ -8,7 +8,9 @@ class Scrapper(object):
 		super(Scrapper, self).__init__()
 
 	def start(self):
-		log.warning('ok')
+		log.success('sucesso')
+		log.error('erro')
+		log.warning('warning')
 		
 if __name__ == '__main__':
 	scrapper = Scrapper()
