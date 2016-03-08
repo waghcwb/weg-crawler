@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from modules.logger import Logger as log
+from modules.data import Data as data
 
 import os
 
@@ -14,7 +15,7 @@ class Scrapper(object):
 
 
 	def start(self):
-		pass
+		noticesList = data.get('notices.list')
 
 
 if __name__ == '__main__':
