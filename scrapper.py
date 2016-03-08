@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 class Scrapper(object):
@@ -6,8 +7,7 @@ class Scrapper(object):
 
 	def start(self):
 		pass
-
-
+		
 if __name__ == '__main__':
 	scrapper = Scrapper()
 	scrapper.start()
