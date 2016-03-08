@@ -1,2 +1,2 @@
-# weg-crawler
-WEG Web Crawler
+# WEG Web Crawler
+Crawler to export WEG notices
