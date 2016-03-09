@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from modules.logger import Logger as log
-from modules.data   import Data as data
+from modules.logger  import Logger as log
+from modules.data    import Data as data
 from modules.crawler import Crawler as crawler
-from modules.helper import Helper as helper
+from modules.helper  import Helper as helper
 
 import os
 import json
@@ -55,7 +55,7 @@ class Scrapper(object):
 			else:
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
-		# 	# Pegar só 1 notícia por enquanto.
+			# Pegar só 1 notícia por enquanto.
 			return
 
 if __name__ == '__main__':
