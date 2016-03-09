@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from bs4 import BeautifulSoup
 from datetime import datetime
+from bs4      import BeautifulSoup
 
 import requests
-import html
-
 
 
 class Crawler(object):
@@ -25,7 +23,7 @@ class Crawler(object):
 		subtitle    = document.select('.noticia-titulo h2')
 		tags        = document.select('.tags a')
 		banner      = document.select('.imagem-corpo-noticia img')[0].get('src') if document.select('.imagem-corpo-noticia img') else 'empty'
-		content     = html.escape(str(document.select('.coluna5 .texto')[0])).encode('ascii', 'xmlcharrefreplace').decode()
+		content     = str(document.select('.coluna5 .texto')[0])
 		timestamp   = document.select('.noticia-detalhe .data')[0].attrs['date-timestamp']
 		publishDate = datetime.fromtimestamp(int(timestamp)).strftime('%d/%m/%Y')
 
