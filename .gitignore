@@ -2,6 +2,8 @@ __pycache__
 
 *.pyc
 
+data/*.json
+
 data/notices/impex/*
 data/notices/dump.json
 data/notices.json
