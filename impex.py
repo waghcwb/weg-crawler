@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from modules.logger import Logger as log
-from sys import exit
+from sys            import exit
+from bs4            import BeautifulSoup
 
 import os
 import json
@@ -61,8 +62,24 @@ class Impex(object):
 				log.error(error)
 				raise error
 
-	def parse(self, impex, link):
-		pass
+
+	def parse(self, content, link):
+		document = BeautifulSoup(content, 'html.parser')
+		toRemove = ['comparison', 'bgdark', 'bglight', 'default', 'clr', 'novaJanela']
+
+		# tratamento posterior
+		if document.select('.link-galeria'):
+			print('*' * 200)
+			print('trata galeria')
+			print('*' * 200)
+
+		for item in toRemove:
+			if document.select('.{selector}'.format(selector=item)):
+				for element in document.select('.{selector}'.format(selector=item)):
+					index = element['class'].index(item)
+					del element['class'][index]
+
+		return str(document).strip()
 
 
 if __name__ == '__main__':
