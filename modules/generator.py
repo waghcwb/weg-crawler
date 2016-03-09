@@ -4,6 +4,7 @@
 from modules.logger import Logger as log
 from modules.helper import Helper as helper
 from sys            import exit
+from bs4            import BeautifulSoup
 
 import os
 import re
@@ -15,10 +16,55 @@ class Generator(object):
 		super(Generator, self).__init__()
 
 
+
+	@staticmethod
+	def setImagesList():
+		dumpFile   = 'data/notices/dump.json'
+		imagesFile = 'data/images.json'
+		images = []
+		dump = json.loads( open(dumpFile, 'r').read() )
+
+		if os.path.isfile(imagesFile):
+			images = json.loads( open(imagesFile, 'r').read() )
+
+		for notice in dump:
+			document = BeautifulSoup(notice['content'], 'html.parser')
+
+			if notice['banner'] != 'empty':
+				images.append({
+					'catalog': notice['catalog'],
+					'downloaded': False,
+					'notice': 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4),
+					'path': notice['banner'],
+					'type': 'banner'
+				})
+
+			if document.select('img'):
+				for image in document.select('img'):
+					try:
+						if image.get('src') in str(images):
+							log.warning('Imagem já adicionada para a lista [{link}]'.format(link=image.get('src')))
+						else:
+							images.append({
+								'catalog': notice['catalog'],
+								'downloaded': False,
+								'notice': 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4),
+								'path': image.get('src'),
+								'type': 'image'
+							})
+					except Exception as error:
+						raise error
+					finally:
+						with open(imagesFile, 'w+') as file:
+							file.write(json.dumps(images, indent=4, sort_keys=True))
+						log.success('Imagem adicionada para a lista [{link}]'.format(link=image.get('src')))
+			return images
+
+
 	@staticmethod
 	def setNotices():
 		noticesListFile = 'data/notices.list'
-		
+
 		if os.path.isfile(noticesListFile):
 			noticesList = open(noticesListFile, 'r') 
 			catalog = None
