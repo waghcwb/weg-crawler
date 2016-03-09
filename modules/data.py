@@ -4,23 +4,24 @@
 from modules.generator import Generator as generator
 
 import os
+import json
 
 
 class Data(object):
 	def __init__(self):
 		super(Data, self).__init__()
 
-
 	@staticmethod
 	def get(item):
-		data = Data
 		if item == 'notices.list':
-			data.getNotices()
+			return Data.getNotices()
 
+
+	@staticmethod
 	def getNotices():
 		noticesFile = 'data/notices.json'
 
 		if os.path.isfile(noticesFile):
-			return open(noticesFile, 'r').read()
+			return json.loads( open(noticesFile, 'r').read() )
 		else:
-			generator.setNotices()
+			return generator.setNotices()
