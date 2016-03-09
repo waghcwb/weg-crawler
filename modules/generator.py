@@ -20,7 +20,7 @@ class Generator(object):
 		noticesListFile = 'data/notices.list'
 		
 		if os.path.isfile(noticesListFile):
-			noticesList = open(noticesListFile, 'r')
+			noticesList = open(noticesListFile, 'r') 
 			catalog = None
 			notices = []
 			notice = 0
@@ -29,7 +29,8 @@ class Generator(object):
 				if re.search('\[.*\]', line):
 					catalog = line.replace('[', '').replace(']', '').replace('\n', '')
 				else:
-					if line.replace('\n', ''):
+					line = line.replace('\n', '')
+					if line:
 						link = line.split(',')[0]
 						language = line.split(',')[1]
 						category = line.split(',')[2]
@@ -45,9 +46,9 @@ class Generator(object):
 						})
 
 						notice += 1
-			helper.createFile('data/notices.json', json.dumps(notices, indent=4, sort_keys=True))
+			helper.createFile('data/notices.json', json.dumps(notices, indent=4, sort_keys=True), mode='w')
 
-			return notices
+			return json.loads(notices)
 
 		else:
 			log.error('Lista de notícias para extrair não existe')
