@@ -18,6 +18,16 @@ class Data(object):
 
 
 	@staticmethod
+	def getImages():
+		imagesFile = 'data/images.json'
+
+		if os.path.isfile(imagesFile):
+			return json.loads( open(imagesFile, 'r').read() )
+		else:
+			return generator.setImagesList()
+
+
+	@staticmethod
 	def getNotices():
 		noticesFile = 'data/notices.json'
 
