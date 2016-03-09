@@ -35,26 +35,22 @@ class Scrapper(object):
 					log.error('[{nid}] Tratar erros: {errors}'.format(nid=nid, errors=errors))
 				else:
 					try:
-						log('Iniciando crawling, alvo: {link}'.format(link=link))
+						log.warning('Iniciando crawling, alvo: {link}'.format(link=link))
 
-						html = crawler.request(link)
+						content = crawler.getData(nid, category, language, catalog, link)
 
-						print(html)
+						# print(html)
 
 					except Exception as error:
 						log.error(error)
-						data[index]['errors'].append(error)
+						noticesList[index]['errors'].append(error)
 						pass
 					finally:
-						print('*' * 100)
-						print(notices)
-						print( type(notices) )
-						print('*' * 100)
-						helper.createFile('data/notices.json', json.dumps(notices, indent=4, sort_keys=True))
+						helper.createFile('data/notices.json', json.dumps(noticesList, indent=4, sort_keys=True), mode='w')
 			else:
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
-			# Pegar só 1 notícia por enquanto.
+		# 	# Pegar só 1 notícia por enquanto.
 			return
 
 if __name__ == '__main__':
