@@ -1,4 +1,14 @@
 __pycache__
+
 *.pyc
+
+data/notices/impex/*
+data/*.json
 data/notices.json
+
+data/images/notices/*
+data/images/images.json
+
+logs/tables/*
+logs/tags/*.json
 logs/201*.log
