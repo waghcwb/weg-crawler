@@ -5,6 +5,7 @@ from modules.logger  import Logger as log
 from modules.data    import Data as data
 from modules.crawler import Crawler as crawler
 from modules.helper  import Helper as helper
+from sys             import exit
 
 import os
 import json
@@ -62,3 +63,4 @@ if __name__ == '__main__':
 	scrapper = Scrapper()
 	scrapper.start()
 	log.success('Finalizando processo: {proccess}'.format(proccess=os.getpid()))
+	exit(0)
