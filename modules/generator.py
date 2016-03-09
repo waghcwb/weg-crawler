@@ -48,7 +48,7 @@ class Generator(object):
 						notice += 1
 			helper.createFile('data/notices.json', json.dumps(notices, indent=4, sort_keys=True), mode='w')
 
-			return json.loads(notices)
+			return notices
 
 		else:
 			log.error('Lista de notícias para extrair não existe')
