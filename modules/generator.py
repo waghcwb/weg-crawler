@@ -3,7 +3,7 @@
 
 from modules.logger import Logger as log
 from modules.helper import Helper as helper
-from sys import exit
+from sys            import exit
 
 import os
 import re
