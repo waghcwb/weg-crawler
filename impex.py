@@ -7,6 +7,7 @@ from bs4            import BeautifulSoup
 
 import os
 import json
+import html
 
 
 class Impex(object):
@@ -16,7 +17,7 @@ class Impex(object):
 
 		self.dumpFile    = 'data/notices/dump.json'
 		self.impexHeader = '$contentCatalog=institutional{catalog}ContentCatalog\n$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]\n$jarResourceCms=jar:net.weg.institucional.initialdata.setup.InitialDataSystemSetup&/weginstitucionalcore/import/cockpits/cmscockpit\n\n'
-		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);title[lang={language}];subtitle[lang={language}];content[lang={language}];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved']\n;;{id};NewsPageTemplate;{title};{subtitle};'{content}';{category};;;{featured};{date};"
+		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);title[lang='{language}'][default='{language}'];subtitle[lang='{language}'][default='{language}'];content[lang='{language}'][default='{language}'];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved']\n;;{id};NewsPageTemplate;{title};{subtitle};'{content}';{category};;;{featured};{date};"
 
 		if os.path.isfile(self.dumpFile):
 			self.start()
@@ -55,7 +56,7 @@ class Impex(object):
 			try:
 				with open(impexFile, mode='a+') as file:
 					if os.path.isfile(impexFile):
-						file.write(self.impexHeader.format(catalog=catalog.capitalize()))
+						file.write(self.impexHeader.format(catalog=notice['catalog'].capitalize()))
 					file.write(impex)
 				log.success('Notícia adicionada no impex [{id}]'.format(id=nid))
 			except Exception as error:
@@ -64,7 +65,7 @@ class Impex(object):
 
 
 	def parse(self, content, link):
-		document = BeautifulSoup(content, 'html.parser')
+		document = BeautifulSoup(content.replace('\n', '').replace('\r', '').replace('&lt;', '<').replace('&gt;', '>').replace('&quot;', '"'), 'html.parser')
 		toRemove = ['comparison', 'bgdark', 'bglight', 'default', 'clr', 'novaJanela']
 
 		# tratamento posterior
@@ -79,7 +80,69 @@ class Impex(object):
 					index = element['class'].index(item)
 					del element['class'][index]
 
-		return str(document).strip()
+		if document.select('.texto'):
+			for element in document.select('.texto'):
+				index = element['class'].index('texto')
+				element['class'][index] = 'post-content'
+
+		if document.select('.center'):
+			for center in document.select('.center'):
+				center['class'] = 'text-center'
+
+		if document.select('img'):
+			images = document.select('img')
+
+			for image in images:
+				imagename = image['src'].split('/')[-1].lower()
+				print('Tratar imagem [{imagename}]'.format(imagename=imagename))
+
+		if document.select('p'):
+			paragraphs = document.select('p')
+
+			for paragraph in paragraphs:
+				for content in paragraph.contents:
+					if content == '\xa0':
+						paragraph.decompose()
+
+		if document.select('table'):
+			tables = document.select('table')
+			tablefilename = helper.logs['tables']
+
+			for table in tables:
+				toRemove = ['cellpadding', 'border', 'cellspacing', 'width', 'height']
+				responsive = document.new_tag('div')
+				responsive['class'] = 'table-responsive'
+				table.wrap(responsive)
+
+				table['class'].append('table table-bordered table-hover')
+
+				for item in toRemove:
+					del table[item]
+
+			if os.path.isfile(tablefilename):
+				content = open(tablefilename).read()
+
+				if link not in content:
+					with open(tablefilename, 'a+') as file:
+						file.write('{link}\n'.format(link=link))
+				else:
+					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link))
+			else:
+				with open(tablefilename, 'a+') as file:
+					file.write('{link}\n'.format(link=link))
+					log.success('Log de tabelas criado.')
+
+		if document.select('ul'):
+			for ul in document.select('ul'):
+				ul['class'] = 'xtt-list-style'
+
+				for li in ul.select('> li'):
+					span = document.new_tag('span')
+					span.string = li.contents[0]
+					li.string = ''
+					li.append(span)
+
+		return html.escape( str(document).strip() )
 
 
 if __name__ == '__main__':
