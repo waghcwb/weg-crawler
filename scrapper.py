@@ -36,11 +36,15 @@ class Scrapper(object):
 				else:
 					try:
 						log.warning('Iniciando crawling, alvo: {link}'.format(link=link))
-
 						content = crawler.getData(nid, category, language, catalog, link)
 
-						# print(html)
-
+						if not content:
+							raise Exception('Título, subtítulo ou conteúdo não encontrados no documento: {url}')
+						else:
+							noticesList[index]['status'] = 'completed'
+							notices.append(content)
+							helper.createFile('data/notices/dump.json', json.dumps(notices, indent=4, sort_keys=True), mode='a+')
+							log.success('[{nid}] Dados salvos com sucesso'.format(nid=nid))
 					except Exception as error:
 						log.error(error)
 						noticesList[index]['errors'].append(error)
