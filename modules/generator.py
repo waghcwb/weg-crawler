@@ -3,9 +3,9 @@
 
 from modules.logger import Logger as log
 from modules.helper import Helper as helper
+from sys import exit
 
 import os
-import sys
 import re
 import json
 
@@ -52,4 +52,4 @@ class Generator(object):
 
 		else:
 			log.error('Lista de notícias para extrair não existe')
-			sys.exit(0)
+			exit(0)
