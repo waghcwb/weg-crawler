@@ -3,7 +3,7 @@ __pycache__
 *.pyc
 
 data/notices/impex/*
-data/*.json
+data/notices/dump.json
 data/notices.json
 
 data/images/notices/*
