@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 import requests
+import html
+
 
 
 class Crawler(object):
@@ -25,3 +28,28 @@ class Crawler(object):
 		content     = html.escape(str(document.select('.coluna5 .texto')[0])).encode('ascii', 'xmlcharrefreplace').decode()
 		timestamp   = document.select('.noticia-detalhe .data')[0].attrs['date-timestamp']
 		publishDate = datetime.fromtimestamp(int(timestamp)).strftime('%d/%m/%Y')
+
+		if title and subtitle and content:
+			title    = str(title[0].contents[0]),
+			subtitle = subtitle[0].contents[0]
+
+			data = {
+				'id':          nid,
+				'title':       title[0],
+				'link':        link,
+				'subtitle':    str(subtitle),
+				'content':     content,
+				'publishDate': publishDate,
+				'banner':      banner,
+				'featured':    False,
+				'wegMagazine': '',
+				'category':    str(category),
+				'tags': ',     '.join(str(x.contents[0]) for x in tags),
+				'language':    language,
+				'catalog':     catalog
+			}
+
+			return data
+		else:
+			log.error('Título, subtítulo ou conteúdo não encontrados no documento: {url}'.format(url=url))
+			return False
