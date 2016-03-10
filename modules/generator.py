@@ -16,7 +16,6 @@ class Generator(object):
 		super(Generator, self).__init__()
 
 
-
 	@staticmethod
 	def setImagesList():
 		dumpFile   = 'data/notices/dump.json'
@@ -35,7 +34,7 @@ class Generator(object):
 					'catalog': notice['catalog'],
 					'downloaded': False,
 					'notice': 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4),
-					'path': notice['banner'],
+					'path': notice['banner'] if notice['banner'].startswith('http') else 'http://www.weg.net{path}'.format(path=notice['banner']),
 					'type': 'banner'
 				})
 
@@ -49,7 +48,7 @@ class Generator(object):
 								'catalog': notice['catalog'],
 								'downloaded': False,
 								'notice': 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4),
-								'path': image.get('src'),
+								'path': image.get('src') if image.get('src').startswith('http') else 'http://www.weg.net{path}'.format(path=image.get('src')),
 								'type': 'image'
 							})
 					except Exception as error:
@@ -67,9 +66,9 @@ class Generator(object):
 
 		if os.path.isfile(noticesListFile):
 			noticesList = open(noticesListFile, 'r') 
-			catalog = None
-			notices = []
-			notice = 0
+			catalog     = None
+			notices     = []
+			notice      = 0
 
 			for line in noticesList:
 				if re.search('\[.*\]', line):
@@ -77,7 +76,7 @@ class Generator(object):
 				else:
 					line = line.replace('\n', '')
 					if line:
-						link = line.split(',')[0]
+						link     = line.split(',')[0]
 						language = line.split(',')[1]
 						category = line.split(',')[2]
 
