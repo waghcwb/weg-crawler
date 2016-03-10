@@ -22,32 +22,27 @@ class Crawler(object):
 		title       = document.select('.noticia-titulo h1')
 		subtitle    = document.select('.noticia-titulo h2')
 		tags        = document.select('.tags a')
-		banner      = document.select('.imagem-corpo-noticia img')[0].get('src') if document.select('.imagem-corpo-noticia img') else 'empty'
-		content     = str(document.select('.coluna5 .texto')[0])
+		banner      = document.select('.imagem-corpo-noticia img')
+		content     = document.select('.coluna5 .texto')
 		timestamp   = document.select('.noticia-detalhe .data')[0].attrs['date-timestamp']
 		publishDate = datetime.fromtimestamp(int(timestamp)).strftime('%d/%m/%Y')
 
-		if title and subtitle and content:
-			title    = str(title[0].contents[0]),
-			subtitle = subtitle[0].contents[0]
+		data = {
+			'id':          nid,
+			'title':       str(title[0].contents[0]) if title[0].contents else '',
+			'subtitle':    str(subtitle[0].contents[0]) if subtitle[0].contents else '',
+			'content':     str(content[0].contents[0]) if content[0].contents else '',
+			'link':        link,
+			'publishDate': publishDate,
+			'banner':      banner[0].get('src') if banner[0] else 'empty',
+			'featured':    False,
+			'wegMagazine': '',
+			'category':    category,
+			'tags':        ', '.join(str(x.contents[0]) for x in tags),
+			'language':    language,
+			'catalog':     catalog
+		}
 
-			data = {
-				'id':          nid,
-				'title':       title[0],
-				'link':        link,
-				'subtitle':    str(subtitle),
-				'content':     content,
-				'publishDate': publishDate,
-				'banner':      banner,
-				'featured':    False,
-				'wegMagazine': '',
-				'category':    str(category),
-				'tags': ',     '.join(str(x.contents[0]) for x in tags),
-				'language':    language,
-				'catalog':     catalog
-			}
+		print(data)
 
-			return data
-		else:
-			log.error('Título, subtítulo ou conteúdo não encontrados no documento: {url}'.format(url=url))
-			return False
+		return data
