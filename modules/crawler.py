@@ -17,6 +17,7 @@ class Crawler(object):
 		html = BeautifulSoup(requests.get(link).text, parser)
 		return Crawler.parseData(html, nid, category, language, catalog, link)
 
+
 	@staticmethod
 	def parseData(document, nid, category, language, catalog, link):
 		title       = document.select('.noticia-titulo h1')
@@ -34,7 +35,7 @@ class Crawler(object):
 			'content':     str(content[0].contents[0]) if content[0].contents else '',
 			'link':        link,
 			'publishDate': publishDate,
-			'banner':      banner[0].get('src') if banner[0] else 'empty',
+			'banner':      banner[0].get('src') if banner[0] and banner[0].get('src') else 'empty',
 			'featured':    False,
 			'wegMagazine': '',
 			'category':    category,
@@ -42,7 +43,5 @@ class Crawler(object):
 			'language':    language,
 			'catalog':     catalog
 		}
-
-		print(data)
 
 		return data
