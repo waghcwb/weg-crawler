@@ -9,6 +9,7 @@ from sys             import exit
 
 import os
 import json
+import time
 
 
 class Scrapper(object):
@@ -40,7 +41,7 @@ class Scrapper(object):
 						content = crawler.getData(nid, category, language, catalog, link)
 
 						if not content:
-							raise Exception('Título, subtítulo ou conteúdo não encontrados no documento: {url}')
+							raise Exception('Título, subtítulo ou conteúdo não encontrados no documento: {url}'.format(url=link))
 						else:
 							noticesList[index]['status'] = 'completed'
 							notices.append(content)
@@ -52,7 +53,7 @@ class Scrapper(object):
 						pass
 					finally:
 						helper.createFile('data/notices.json', json.dumps(noticesList, indent=4, sort_keys=True), mode='w')
-						# time.sleep(20)
+						# time.sleep(5)
 			else:
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
