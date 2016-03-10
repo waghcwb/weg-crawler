@@ -23,20 +23,27 @@ class Images(object):
 		images = data.getImages()
 
 		for image in images:
-			filename = '{folder}/{notice}/{image}'.format(folder=self.imagesFolder, notice=image['notice'], image=image['path'].split('/')[-1])
+			filename = '{folder}/{notice}/{image}'.format(folder=self.imagesFolder, notice=image['notice'], image=os.path.basename(image['path']))
 			self.download(image['path'], filename)
+
 
 	def download(self, link, filename):
 		try:
-			response = requests.get(link, stream=True)
-			folder = os.path.dirname(filename)
-			
+			response  = requests.get(link, stream=True)
+			folder    = '{folder}/{subfolder}'.format(folder=os.path.dirname(filename), subfolder=os.path.dirname(link).split('/')[-1])
+			image     = os.path.basename(filename).lower()
+
 			if not os.path.isdir(folder):
 				os.makedirs(folder)
 
-			with open(filename, 'wb') as image:
-				shutil.copyfileobj(response.raw, image)
-				log.success('Imagem baixada com sucesso [{image}]'.format(image=filename))
+			filename = '{folder}/{image}'.format(folder=folder, image=image)
+
+			if not os.path.isfile(filename):
+				with open(filename, 'wb') as image:
+					shutil.copyfileobj(response.raw, image)
+					log.success('Imagem baixada com sucesso [{image}]'.format(image=image))
+			else:
+				log.warning('Imagem já baixada [{image}]'.format(image=os.path.basename(filename)))
 		except Exception as error:
 			log.error(error)
 			raise error
