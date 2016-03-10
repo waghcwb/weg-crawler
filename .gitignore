@@ -8,8 +8,8 @@ data/notices/impex/*
 data/notices/dump.json
 data/notices.json
 
-data/images/notices/*
-data/images/images.json
+data/notices/images/*
+data/images.json
 
 logs/tables/*
 logs/tags/*.json
