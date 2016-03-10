@@ -93,7 +93,7 @@ class Impex(object):
 			images = document.select('img')
 
 			for image in images:
-				imagename = image['src'].split('/')[-1].lower()
+				imagename = os.path.basename(image['src']).lower()
 				print('Tratar imagem [{imagename}]'.format(imagename=imagename))
 
 		if document.select('p'):
