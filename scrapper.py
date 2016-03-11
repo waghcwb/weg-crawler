@@ -45,20 +45,21 @@ class Scrapper(object):
 						else:
 							noticesList[index]['status'] = 'completed'
 							notices.append(content)
-							helper.createFile('data/notices/dump.json', json.dumps(notices, indent=4, sort_keys=True), mode='w')
+							helper.createFile('data/notices/dump.json', notices, mode='w', format='json')
 							log.success('[{nid}] Dados salvos com sucesso'.format(nid=nid))
 					except Exception as error:
-						log.error(error)
+						log.error(error.args[0])
 						noticesList[index]['errors'].append(error)
 						pass
 					finally:
-						helper.createFile('data/notices.json', json.dumps(noticesList, indent=4, sort_keys=True), mode='w')
-						time.sleep(20)
+						helper.createFile('data/notices.json', noticesList, mode='w', format='json')
+						# time.sleep(20)
 			else:
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
 			# Pegar só 1 notícia por enquanto.
-			# return
+			if index == 10:
+				return
 
 
 if __name__ == '__main__':
