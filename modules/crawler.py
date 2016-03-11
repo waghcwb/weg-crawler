@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-from bs4      import BeautifulSoup
+from modules.parser import Parser as parser
+from datetime       import datetime
+from bs4            import BeautifulSoup
 
 import requests
 
@@ -25,21 +26,20 @@ class Crawler(object):
 		tags        = document.select('.tags a')
 		banner      = document.select('.imagem-corpo-noticia img')
 		content     = document.select('.coluna5 .texto')
-		timestamp   = document.select('.noticia-detalhe .data')[0].attrs['date-timestamp']
-		publishDate = datetime.fromtimestamp(int(timestamp)).strftime('%d/%m/%Y')
+		timestamp   = document.select('.noticia-detalhe .data')
 
 		data = {
 			'id':          nid,
-			'title':       str(title[0].contents[0]) if title[0].contents else '',
-			'subtitle':    str(subtitle[0].contents[0]) if subtitle[0].contents else '',
-			'content':     str(content[0].contents[0]) if content[0].contents else '',
+			'title':       parser.title(title),
+			'subtitle':    parser.subtitle(subtitle),
+			'content':     parser.content(content),
 			'link':        link,
-			'publishDate': publishDate,
-			'banner':      banner[0].get('src') if banner[0] and banner[0].get('src') else 'empty',
+			'publishDate': parser.date(timestamp),
+			'banner':      parser.banner(banner),
 			'featured':    False,
 			'wegMagazine': '',
 			'category':    category,
-			'tags':        ', '.join(str(x.contents[0]) for x in tags),
+			'tags':        parser.tags(tags),
 			'language':    language,
 			'catalog':     catalog
 		}
