@@ -20,7 +20,7 @@ class Images(object):
 		self.imagesFolder = 'data/notices/images'
 		self.dumpFile     = 'data/notices/dump.json'
 
-		images = data.getImages()
+		images = data.get('images')
 
 		for image in images:
 			filename = '{folder}/{notice}/{image}'.format(folder=self.imagesFolder, notice=image['notice'], image=os.path.basename(image['path']))
