@@ -45,7 +45,7 @@ class Scrapper(object):
 						else:
 							noticesList[index]['status'] = 'completed'
 							notices.append(content)
-							helper.createFile('data/notices/dump.json', json.dumps(notices, indent=4, sort_keys=True), mode='a+')
+							helper.createFile('data/notices/dump.json', json.dumps(notices, indent=4, sort_keys=True), mode='w')
 							log.success('[{nid}] Dados salvos com sucesso'.format(nid=nid))
 					except Exception as error:
 						log.error(error)
