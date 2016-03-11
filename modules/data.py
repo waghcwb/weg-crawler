@@ -16,13 +16,16 @@ class Data(object):
 		if item == 'notices.list':
 			return Data.getNotices()
 
+		if item == 'images':
+			return Data.getImages()
+
 
 	@staticmethod
 	def getImages():
 		imagesFile = 'data/images.json'
 
 		if os.path.isfile(imagesFile):
-			return json.loads( open(imagesFile, 'r').read() )
+			return json.loads( open(imagesFile, 'r', encoding='utf-8').read() )
 		else:
 			return generator.setImagesList()
 
@@ -32,6 +35,6 @@ class Data(object):
 		noticesFile = 'data/notices.json'
 
 		if os.path.isfile(noticesFile):
-			return json.loads( open(noticesFile, 'r').read() )
+			return json.loads( open(noticesFile, 'r', encoding='utf-8').read() )
 		else:
 			return generator.setNotices()

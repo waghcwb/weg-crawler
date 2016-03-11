@@ -14,5 +14,5 @@ class Helper(object):
 	def createFile(filename, content, mode='a+'):
 		os.chdir(sys.path[0])
 
-		with open(filename, mode) as file:
+		with open(filename, mode, encoding='utf-8') as file:
 		    file.write(content)

@@ -21,10 +21,10 @@ class Generator(object):
 		dumpFile   = 'data/notices/dump.json'
 		imagesFile = 'data/images.json'
 		images = []
-		dump = json.loads( open(dumpFile, 'r').read() )
+		dump = json.loads( open(dumpFile, 'r', encoding='utf-8').read() )
 
 		if os.path.isfile(imagesFile):
-			images = json.loads( open(imagesFile, 'r').read() )
+			images = json.loads( open(imagesFile, 'r', encoding='utf-8').read() )
 
 		for notice in dump:
 			document = BeautifulSoup(notice['content'], 'html.parser')
@@ -54,7 +54,7 @@ class Generator(object):
 					except Exception as error:
 						raise error
 					finally:
-						with open(imagesFile, 'w+') as file:
+						with open(imagesFile, 'w+', encoding='utf-8') as file:
 							file.write(json.dumps(images, indent=4, sort_keys=True))
 						log.success('Imagem adicionada para a lista [{link}]'.format(link=image.get('src')))
 			return images
@@ -65,7 +65,7 @@ class Generator(object):
 		noticesListFile = 'data/notices.list'
 
 		if os.path.isfile(noticesListFile):
-			noticesList = open(noticesListFile, 'r') 
+			noticesList = open(noticesListFile, 'r', encoding='utf-8') 
 			catalog     = None
 			notices     = []
 			notice      = 0

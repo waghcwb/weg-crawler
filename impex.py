@@ -27,7 +27,7 @@ class Impex(object):
 
 
 	def start(self):
-		dump = open(self.dumpFile, 'r').read()
+		dump = open(self.dumpFile, 'r', encoding='utf-8').read()
 
 		for notice in json.loads(dump):
 			nid       = 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4)
@@ -48,13 +48,13 @@ class Impex(object):
 			).strip()
 
 			if os.path.isfile(impexFile):
-				content = open(impexFile).read()
+				content = open(impexFile, encoding='utf-8').read()
 
 				if nid in content:
 					log.warning('Notícia já adicionada no impex [{nid}]'.format(nid=nid))
 					return False
 			try:
-				with open(impexFile, mode='a+') as file:
+				with open(impexFile, mode='a+', encoding='utf-8') as file:
 					if os.path.isfile(impexFile):
 						file.write(self.impexHeader.format(catalog=notice['catalog'].capitalize()))
 					file.write(impex)
@@ -120,15 +120,15 @@ class Impex(object):
 					del table[item]
 
 			if os.path.isfile(tablefilename):
-				content = open(tablefilename).read()
+				content = open(tablefilename, encoding='utf-8').read()
 
 				if link not in content:
-					with open(tablefilename, 'a+') as file:
+					with open(tablefilename, 'a+', encoding='utf-8') as file:
 						file.write('{link}\n'.format(link=link))
 				else:
 					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link))
 			else:
-				with open(tablefilename, 'a+') as file:
+				with open(tablefilename, 'a+', encoding='utf-8') as file:
 					file.write('{link}\n'.format(link=link))
 					log.success('Log de tabelas criado.')
 
