@@ -91,7 +91,7 @@ class Generator(object):
 						})
 
 						notice += 1
-			helper.createFile('data/notices.json', json.dumps(notices, indent=4, sort_keys=True), mode='w')
+			helper.createFile('data/notices.json', notices, mode='w', format='json')
 
 			return notices
 
