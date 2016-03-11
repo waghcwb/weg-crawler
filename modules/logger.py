@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from modules.helper import Helper as helper
-
 import __main__ as main
 import time
 
@@ -55,7 +53,9 @@ class Logger(object):
 		)
 
 		print(message)
-		helper.createFile('logs/{time}.log'.format(time=time.strftime('%Y-%m-%d')), log)
+
+		with open('logs/{time}.log'.format(time=time.strftime('%Y-%m-%d')), 'a+', encoding='utf-8') as file:
+			file.write(log)
 
 		return True
 
