@@ -95,22 +95,22 @@ class Parser(object):
 
 	@staticmethod
 	def subtitle(subtitle):
-		return subtitle[0].string if subtitle[0] else 'Subtítulo vazio'
+		return subtitle[0].string if subtitle and subtitle[0] else 'Subtítulo vazio'
 
 
 	@staticmethod
 	def title(title):
-		return title[0].string if title[0] else 'Título vazio'
+		return title[0].string if title and title[0] else 'Título vazio'
 
 
 	@staticmethod
 	def banner(banner):
-		return banner[0].get('src') if banner[0] else 'empty'
+		return banner[0].get('src') if banner and banner[0] else 'empty'
 
 
 	@staticmethod
 	def date(publishDate):
-		timestamp = publishDate[0].attrs['date-timestamp'] if publishDate[0] else 0
+		timestamp = publishDate[0].attrs['date-timestamp'] if publishDate and publishDate[0] else 0
 		return datetime.fromtimestamp(int(timestamp)).strftime('%d/%m/%Y')
 
 
