@@ -18,6 +18,7 @@ class Logger(object):
 			return False
 
 		now = time.strftime('%Y-%m-%d %H:%M:%S')
+		message = str(message).encode('utf-8')
 
 		colors = {
 		    'red': '\033[0;31m',
@@ -39,7 +40,7 @@ class Logger(object):
 		log = '[ {type} ] [{time}] {message}\n'.format(
 			type = ' ' + messageType.upper() + ' ' if messageType == 'error' else messageType.upper(),
 			time = now,
-			message = message
+			message = message.decode('utf-8')
 		)
 
 		message = '{color}[ {type} ]{reset} {gray}[{time}]{reset} {white}{message}{reset} [{file}]'.format(
@@ -49,7 +50,7 @@ class Logger(object):
 			gray = colors['gray'],
 			time = now, 
 			white = colors['white'],
-			message = message,
+			message = message.decode('utf-8'),
 			file = main.__file__
 		)
 
