@@ -8,6 +8,7 @@ from bs4            import BeautifulSoup
 
 import os
 import re
+import html
 import json
 
 
@@ -17,17 +18,53 @@ class Generator(object):
 
 
 	@staticmethod
+	def setImage(image, nid, catalog):
+		imagesFile = 'data/images.json'
+		images = json.loads(open(imagesFile, encoding='utf-8', mode='r').read()) if os.path.isfile(imagesFile) else []
+		imagename = image.get('src')
+		baseurl = 'http://www.weg.net'
+
+		if not imagename.startswith('http'):
+			imagename = baseurl + imagename
+
+		try:
+			if not imagename in json.dumps(images):
+				images.append({
+					'catalog': catalog,
+					'downloaded': False,
+					'notice': 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4),
+					'path': imagename,
+					'type': 'image'
+				})
+
+				log.success('Imagem setada [{url}]'.format(url=imagename))
+			else:
+				log.warning('Imagem já adicionada para fazer download [{url}]'.format(url=imagename))
+		except Exception as error:
+			log.error('Erro ao adicionar a imagem para a lista [{url}]'.format(url=imagename))
+			log.error(error.args[0])
+			pass
+		finally:
+			helper.createFile(imagesFile, images, mode='w', format='json')
+			pass
+
+		# if os.path.isfile(imagesFile):
+		# 	content = open(imagesFile, encoding='utf-8', mode='r')
+
+		# 	if content:
+		# 		print(content)
+
+
+
+	@staticmethod
 	def setImagesList():
 		dumpFile   = 'data/notices/dump.json'
 		imagesFile = 'data/images.json'
-		images = []
-		dump = json.loads( open(dumpFile, 'r', encoding='utf-8').read() )
-
-		if os.path.isfile(imagesFile):
-			images = json.loads( open(imagesFile, 'r', encoding='utf-8').read() )
+		images     = json.loads( open(imagesFile, 'r', encoding='utf-8').read() ) if os.path.isfile(imagesFile) else []
+		dump       = json.loads( open(dumpFile, 'r', encoding='utf-8').read() )
 
 		for notice in dump:
-			document = BeautifulSoup(notice['content'], 'html.parser')
+			document = html.unescape(BeautifulSoup(notice['content'], 'html.parser'))
 
 			if notice['banner'] != 'empty':
 				images.append({
@@ -54,9 +91,12 @@ class Generator(object):
 					except Exception as error:
 						raise error
 					finally:
-						with open(imagesFile, 'w+', encoding='utf-8') as file:
+						with open(filename=imagesFile, mode='w+', encoding='utf-8') as file:
 							file.write(json.dumps(images, indent=4, sort_keys=True))
 						log.success('Imagem adicionada para a lista [{link}]'.format(link=image.get('src')))
+			else:
+				log.warning('Notícia sem imagens')
+
 			return images
 
 
