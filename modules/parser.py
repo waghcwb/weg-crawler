@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from modules.logger  import Logger as log
-from bs4            import BeautifulSoup
-from datetime       import datetime
+from modules.logger    import Logger as log
+from modules.generator import Generator as generator
+from bs4               import BeautifulSoup
+from datetime          import datetime
 
 import html
 import os
@@ -15,12 +16,20 @@ class Parser(object):
 
 
 	@staticmethod
-	def content(content):
+	def content(content, nid, catalog):
 		if not content[0]:
 			return 'Conteúdo vazio'
 
 		document = BeautifulSoup(content[0].encode('utf-8'), 'html.parser')
 		toRemove = ['comparison', 'bgdark', 'bglight', 'default', 'clr', 'novaJanela']
+
+		if document.select('img'):
+			images = document.select('img')
+
+			for image in images:
+				imagename = os.path.basename(image['src']).lower()
+				generator.setImage(image, nid, catalog)
+				# print('Tratar imagem [{imagename}]'.format(imagename=imagename))
 
 		for item in toRemove:
 			if document.select('.{selector}'.format(selector=item)):
@@ -36,13 +45,6 @@ class Parser(object):
 		if document.select('.center'):
 			for center in document.select('.center'):
 				center['class'] = 'text-center'
-
-		if document.select('img'):
-			images = document.select('img')
-
-			for image in images:
-				imagename = os.path.basename(image['src']).lower()
-				print('Tratar imagem [{imagename}]'.format(imagename=imagename))
 
 		if document.select('p'):
 			paragraphs = document.select('p')
