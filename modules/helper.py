@@ -6,11 +6,27 @@ from modules.logger import Logger as log
 import sys
 import os
 import json
+import shutil
+import requests
 
 
 class Helper(object):
 	def __init__(self):
 		super(Helper, self).__init__()
+
+
+	@staticmethod
+	def download(type, filename, nid, url):
+		if type == 'image':
+			try:
+				response = requests.get(url, stream=True)
+
+				with open(filename, 'wb') as image:
+					shutil.copyfileobj(response.raw, image)
+				log.success('Imagem baixada com sucesso [{url}]'.format(url=url))
+			except Exception as error:
+				log.error(error)
+				pass
 
 
 	@staticmethod
