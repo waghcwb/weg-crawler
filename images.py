@@ -3,6 +3,7 @@
 
 from modules.logger    import Logger as log
 from modules.generator import Generator as generator
+from modules.helper    import Helper as helper
 from modules.data      import Data as data
 from sys               import exit
 
@@ -17,36 +18,36 @@ class Images(object):
 		super(Images, self).__init__()
 
 		self.imagesFile   = 'data/images.json'
-		self.imagesFolder = 'data/notices/images'
+		self.imagesFolder = 'data/notices/images/'
 		self.dumpFile     = 'data/notices/dump.json'
 
+		if os.path.isfile(self.imagesFile):
+			self.start()
+		else:
+			log.error('Dump de imagens não existe.')
+
+	def start(self):
 		images = data.get('images')
 
-		for image in images:
-			filename = '{folder}/{notice}/{image}'.format(folder=self.imagesFolder, notice=image['notice'], image=os.path.basename(image['path']))
-			self.download(image['path'], filename)
+		for index, image in enumerate(images, start=0):
+			try:
+				if not image['downloaded']:
+					folder   = self.imagesFolder + os.path.dirname(image['path'].replace('http://www.weg.net/', ''))
+					filename = self.imagesFolder + image['path'].replace('http://www.weg.net/', '')
 
+					if not os.path.isdir(folder):
+						os.makedirs(folder, exist_ok=True)
 
-	def download(self, link, filename):
-		try:
-			response  = requests.get(link, stream=True)
-			folder    = '{folder}/{subfolder}'.format(folder=os.path.dirname(filename), subfolder=os.path.dirname(link).split('/')[-1])
-			image     = os.path.basename(filename).lower()
+					helper.download(type='image', filename=filename, nid=index, url=image['path'])
 
-			if not os.path.isdir(folder):
-				os.makedirs(folder)
-
-			filename = '{folder}/{image}'.format(folder=folder, image=image)
-
-			if not os.path.isfile(filename):
-				with open(filename, 'wb') as image:
-					shutil.copyfileobj(response.raw, image)
-					log.success('Imagem baixada com sucesso [{image}]'.format(image=image))
-			else:
-				log.warning('Imagem já baixada [{image}]'.format(image=os.path.basename(filename)))
-		except Exception as error:
-			log.error(error)
-			raise error
+					images[index]['downloaded'] = True
+				else:
+					log.warning('Imagem já baixada [{url}]'.format(url=image['path']))
+			except Exception as error:
+				log.error(error)
+				pass
+			finally:
+				helper.createFile(self.imagesFile, images, mode='w', format='json')
 
 
 if __name__ == '__main__':
