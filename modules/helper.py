@@ -30,15 +30,38 @@ class Helper(object):
 
 
 	@staticmethod
-	def createFile(filename, content, mode='a+', format=None):
+	def createFile(filename, content, mode='a+', encoding='utf-8', format=None):
 		os.chdir(sys.path[0])
 
-		with open(filename, mode, encoding='utf-8') as file:
+		try:
 			if format == 'json':
-				try:
-					file.write(json.dumps(content, indent=4, sort_keys=True))
-				except Exception as error:
-					log.error(error.args[0])
-					pass
-			else:
-				file.write(content)
+				content = json.dumps(content, indent=4, sort_keys=True)
+
+			_file = open(filename, mode=mode, encoding=encoding)
+			_file.write(content)
+			_file.close()
+		except Exception as error:
+			log.error(error.args[0])
+			pass
+
+
+	@staticmethod
+	def readFile(filename, format=None, mode='r', encoding='utf-8'):
+		os.chdir(sys.path[0])
+
+		if not os.path.isfile(filename):
+			log.error('O arquivo não existe [{file}]'.format(file=filename))
+			return None
+		else:
+			try:
+				_file = open(filename, mode=mode, encoding=encoding)
+				_content = _file.read()
+				_file.close()
+
+				if format == 'json':
+					return json.loads(_content)
+				else:
+					return _content
+			except Exception as error:
+				log.error(error.args[0])
+				pass
