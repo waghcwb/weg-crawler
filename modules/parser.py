@@ -23,19 +23,19 @@ class Parser(object):
 		document = BeautifulSoup(content[0].encode('utf-8'), 'html.parser')
 		toRemove = ['comparison', 'bgdark', 'bglight', 'default', 'clr', 'novaJanela']
 
+		for item in toRemove:
+			if document.select('.{selector}'.format(selector=item)):
+				for element in document.select('.{selector}'.format(selector=item)):
+					index = element['class'].index(item)
+					del element['class'][index]
+
 		if document.select('img'):
 			images = document.select('img')
 
 			for image in images:
 				imagename = os.path.basename(image['src']).lower()
 				generator.setImage(image, nid, catalog)
-				# print('Tratar imagem [{imagename}]'.format(imagename=imagename))
-
-		for item in toRemove:
-			if document.select('.{selector}'.format(selector=item)):
-				for element in document.select('.{selector}'.format(selector=item)):
-					index = element['class'].index(item)
-					del element['class'][index]
+				image.attrs['src'] = 'image-link'
 
 		if document.select('.texto'):
 			for element in document.select('.texto'):
@@ -96,13 +96,13 @@ class Parser(object):
 
 
 	@staticmethod
-	def subtitle(subtitle):
-		return subtitle[0].string if subtitle and subtitle[0] else 'Subtítulo vazio'
+	def title(title):
+		return title[0].string if title and title[0] else ''
 
 
 	@staticmethod
-	def title(title):
-		return title[0].string if title and title[0] else 'Título vazio'
+	def subtitle(subtitle):
+		return subtitle[0].string if subtitle and subtitle[0] else ''
 
 
 	@staticmethod
