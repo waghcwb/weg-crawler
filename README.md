@@ -1,8 +1,5 @@
-# WEG Web Crawler
-Crawler to export WEG notices
-
 # WEB Crawler
-> Crawler to extract notices from [http://www.weg.net](WEG) website
+> Crawler to extract notices from [WEG](http://www.weg.net) website
 
 ## Installation
 
@@ -36,8 +33,6 @@ $ ./impex.py
 
 ## Meta
 
-Wagner Souza - ([mailto:wagh.cwb@gmail.com](wagh.cwb@gmaik.com))
+Wagner Souza - ([wagh.cwb@gmail.com](mailto:wagh.cwb@gmail.com))
 
-Distributed under the XYZ license. See ``LICENSE`` for more information.
-
-[https://github.com/waghcwb/weg-crawler](https://github.com/waghcwb/weg-crawler)
+[www.github.com/waghcwb/weg-crawler](https://github.com/waghcwb/weg-crawler)
