@@ -53,13 +53,13 @@ class Scrapper(object):
 						pass
 					finally:
 						helper.createFile('data/notices.json', noticesList, mode='w', format='json')
-						# time.sleep(20)
+						time.sleep(20)
 			else:
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
 			# Pegar só 1 notícia por enquanto.
-			if index == 5:
-				return
+			# if index == 5:
+				# return
 
 
 if __name__ == '__main__':
