@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from modules.generator import Generator as generator
+from modules.helper    import Helper as helper
 
 import os
 import json
@@ -25,7 +26,7 @@ class Data(object):
 		imagesFile = 'data/images.json'
 
 		if os.path.isfile(imagesFile):
-			return json.loads( open(imagesFile, 'r', encoding='utf-8').read() )
+			return helper.readFile(imagesFile, format='json')
 		else:
 			return generator.setImagesList()
 
@@ -35,6 +36,6 @@ class Data(object):
 		noticesFile = 'data/notices.json'
 
 		if os.path.isfile(noticesFile):
-			return json.loads( open(noticesFile, 'r', encoding='utf-8').read() )
+			return helper.readFile(noticesFile, format='json')
 		else:
 			return generator.setNotices()

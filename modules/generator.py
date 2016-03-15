@@ -20,7 +20,7 @@ class Generator(object):
 	@staticmethod
 	def setImage(image, nid, catalog):
 		imagesFile = 'data/images.json'
-		images = json.loads(open(imagesFile, encoding='utf-8', mode='r').read()) if os.path.isfile(imagesFile) else []
+		images = helper.readFile(imagesFile, format='json') if os.path.isfile(imagesFile) else []
 		imagename = image.get('src')
 		baseurl = 'http://www.weg.net'
 
@@ -48,20 +48,13 @@ class Generator(object):
 			helper.createFile(imagesFile, images, mode='w', format='json')
 			pass
 
-		# if os.path.isfile(imagesFile):
-		# 	content = open(imagesFile, encoding='utf-8', mode='r')
-
-		# 	if content:
-		# 		print(content)
-
-
 
 	@staticmethod
 	def setImagesList():
 		dumpFile   = 'data/notices/dump.json'
 		imagesFile = 'data/images.json'
-		images     = json.loads( open(imagesFile, 'r', encoding='utf-8').read() ) if os.path.isfile(imagesFile) else []
-		dump       = json.loads( open(dumpFile, 'r', encoding='utf-8').read() )
+		images     = helper.readFile(imagesFile, format='json') if os.path.isfile(imagesFile) else []
+		dump       = helper.readFile(dumpFile, format='json')
 
 		for notice in dump:
 			document = html.unescape(BeautifulSoup(notice['content'], 'html.parser'))
@@ -91,8 +84,7 @@ class Generator(object):
 					except Exception as error:
 						raise error
 					finally:
-						with open(filename=imagesFile, mode='w+', encoding='utf-8') as file:
-							file.write(json.dumps(images, indent=4, sort_keys=True))
+						helper.createFile(imagesFile, images, mode='w+', format='json')
 						log.success('Imagem adicionada para a lista [{link}]'.format(link=image.get('src')))
 			else:
 				log.warning('Notícia sem imagens')
@@ -105,16 +97,15 @@ class Generator(object):
 		noticesListFile = 'data/notices.list'
 
 		if os.path.isfile(noticesListFile):
-			noticesList = open(noticesListFile, 'r', encoding='utf-8') 
+			noticesList = helper.readFile(noticesListFile)
 			catalog     = None
 			notices     = []
 			notice      = 0
 
-			for line in noticesList:
+			for line in noticesList.split('\n'):
 				if re.search('\[.*\]', line):
 					catalog = line.replace('[', '').replace(']', '').replace('\n', '')
 				else:
-					line = line.replace('\n', '')
 					if line:
 						link     = line.split(',')[0]
 						language = line.split(',')[1]
@@ -130,7 +121,8 @@ class Generator(object):
 							'catalog': catalog
 						})
 
-						notice += 1
+						notice += 1						
+			
 			helper.createFile('data/notices.json', notices, mode='w', format='json')
 
 			return notices

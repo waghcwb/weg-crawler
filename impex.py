@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from modules.helper import Helper as helper
 from modules.logger import Logger as log
 from sys            import exit
 from bs4            import BeautifulSoup
@@ -27,9 +28,9 @@ class Impex(object):
 
 
 	def start(self):
-		dump = open(self.dumpFile, 'r', encoding='utf-8').read()
+		content = helper.readFile(self.dumpFile, format='json')
 
-		for notice in json.loads(dump):
+		for notice in content:
 			try:
 				nid       = 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4)
 				link      = notice['link']
@@ -49,21 +50,16 @@ class Impex(object):
 				)
 
 				if os.path.isfile(impexFile):
-					content = open(impexFile, mode='r', encoding='utf-8').read()
+					content = helper.readFile(impexFile)
 
 					if nid in content:
 						log.warning('Notícia já adicionada no impex [{nid}]'.format(nid=nid))
 					else:
-						with open(impexFile, mode='a+', encoding='utf-8') as file:
-							file.write(impex)
+						helper.createFile(impexFile, impex)
 						log.success('Notícia adicionada no impex [{id}]'.format(id=nid))
 				else:
-					with open(impexFile, mode='a+', encoding='utf-8') as file:
-						file.write(self.impexHeader.format(catalog=notice['catalog'].capitalize()) + impex)
+					helper.createFile(impexFile, self.impexHeader.format(catalog=notice['catalog'].capitalize()) + impex)
 					log.success('Notícia adicionada no impex [{id}]'.format(id=nid))					
-
-				
-
 			except Exception as error:
 				log.error(error.args[0])
 				pass

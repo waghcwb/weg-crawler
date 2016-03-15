@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from modules.logger    import Logger as log
+from modules.helper    import Helper as helper
 from modules.generator import Generator as generator
 from bs4               import BeautifulSoup
 from datetime          import datetime
@@ -70,17 +71,16 @@ class Parser(object):
 					del table[item]
 
 			if os.path.isfile(tablefilename):
-				content = open(tablefilename, encoding='utf-8').read()
+				content = helper.readFile(filename)
 
 				if link not in content:
-					with open(tablefilename, 'a+', encoding='utf-8') as file:
-						file.write('{link}\n'.format(link=link))
+					helper.createFile(tablefilename, '{link}\n'.format(link=link))
 				else:
 					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link))
 			else:
-				with open(tablefilename, 'a+', encoding='utf-8') as file:
-					file.write('{link}\n'.format(link=link))
-					log.success('Log de tabelas criado.')
+				helper.createFile(tablefilename, '{link}\n'.format(link=link))
+				log.success('Log de tabelas criado.')
+					
 
 		if document.select('ul'):
 			for ul in document.select('ul'):
