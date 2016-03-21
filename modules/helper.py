@@ -24,6 +24,8 @@ class Helper(object):
 				with open(filename, 'wb') as image:
 					shutil.copyfileobj(response.raw, image)
 				log.success('Imagem baixada com sucesso [{url}]'.format(url=url))
+
+				return True
 			except Exception as error:
 				log.error(error)
 				pass
