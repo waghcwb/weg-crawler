@@ -8,7 +8,6 @@ from bs4            import BeautifulSoup
 
 import os
 import re
-import html
 import json
 
 
@@ -30,6 +29,7 @@ class Generator(object):
 		try:
 			if not imagename in json.dumps(images):
 				images.append({
+					'id': nid,
 					'catalog': catalog,
 					'downloaded': False,
 					'notice': 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4),
@@ -51,13 +51,13 @@ class Generator(object):
 
 	@staticmethod
 	def setImagesList():
-		dumpFile   = 'data/notices/dump.json'
+		dumpFile   = 'data/news/dump.json'
 		imagesFile = 'data/images.json'
 		images     = helper.readFile(imagesFile, format='json') if os.path.isfile(imagesFile) else []
 		dump       = helper.readFile(dumpFile, format='json')
 
 		for notice in dump:
-			document = html.unescape(BeautifulSoup(notice['content'], 'html.parser'))
+			document = BeautifulSoup(notice['content'], 'html.parser')
 
 			if notice['banner'] != 'empty':
 				images.append({
@@ -121,7 +121,7 @@ class Generator(object):
 							'catalog': catalog
 						})
 
-						notice += 1						
+						notice += 1
 			
 			helper.createFile('data/notices.json', notices, mode='w', format='json')
 

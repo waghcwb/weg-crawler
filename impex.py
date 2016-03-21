@@ -8,7 +8,6 @@ from bs4            import BeautifulSoup
 
 import os
 import json
-import html
 
 
 class Impex(object):
@@ -16,9 +15,9 @@ class Impex(object):
 		super(Impex, self).__init__()
 		log.success('Iniciando gerador de impex: {proccess}'.format(proccess=os.getpid()))
 
-		self.dumpFile    = 'data/notices/dump.json'
+		self.dumpFile    = 'data/news/dump.json'
 		self.impexHeader = '$contentCatalog=institutional{catalog}ContentCatalog\n$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]\n$jarResourceCms=jar:net.weg.institucional.initialdata.setup.InitialDataSystemSetup&/weginstitucionalcore/import/cockpits/cmscockpit\n'
-		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);title[lang='{language}'][default='{language}'];subtitle[lang='{language}'][default='{language}'];content[lang='{language}'][default='{language}'];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved']\n;;{id};NewsPageTemplate;{title};{subtitle};'{content}';{category};;;{featured};{date};"
+		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);name;title[lang=pt];subtitle[lang=pt];content[lang=pt];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved'];;{id};NewsPageTemplate;{title};{subtitle};{name};\"{content}\";{category};;;{featured};{date}"
 
 		if os.path.isfile(self.dumpFile):
 			self.start()
@@ -34,13 +33,14 @@ class Impex(object):
 			try:
 				nid       = 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4)
 				link      = notice['link']
-				catalog   = 'data/notices/impex/'
+				catalog   = 'data/news/impex/'
 				filename  = '{catalog}.impex'.format(catalog=notice['catalog'])
 				impexFile = '{catalog}/{filename}'.format(catalog=catalog, filename=filename)
 
 				impex = self.notice.format(
 				 	id       = nid,
 					title    = notice['title'],
+					name     = notice['title'],
 					language = notice['language'],
 					date     = notice['publishDate'],
 					subtitle = notice['subtitle'],

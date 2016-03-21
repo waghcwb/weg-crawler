@@ -18,8 +18,8 @@ class Images(object):
 		super(Images, self).__init__()
 
 		self.imagesFile   = 'data/images.json'
-		self.imagesFolder = 'data/notices/images/'
-		self.dumpFile     = 'data/notices/dump.json'
+		self.imagesFolder = 'data/news/images/'
+		self.dumpFile     = 'data/news/dump.json'
 
 		if os.path.isfile(self.imagesFile):
 			self.start()

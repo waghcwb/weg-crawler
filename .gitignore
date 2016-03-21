@@ -4,11 +4,11 @@ __pycache__
 
 data/*.json
 
-data/notices/impex/*
-data/notices/dump.json
-data/notices.json
+data/news/impex/*
+data/news/dump.json
+data/news.json
 
-data/notices/images/*
+data/news/images/*
 data/images.json
 
 logs/tables/*

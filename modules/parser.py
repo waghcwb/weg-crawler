@@ -7,8 +7,8 @@ from modules.generator import Generator as generator
 from bs4               import BeautifulSoup
 from datetime          import datetime
 
-import html
 import os
+import html
 
 
 class Parser(object):
@@ -17,12 +17,13 @@ class Parser(object):
 
 
 	@staticmethod
-	def content(content, nid, catalog):
+	def content(content, nid, catalog, link):
 		if not content[0]:
 			return 'Conteúdo vazio'
 
 		document = BeautifulSoup(content[0].encode('utf-8'), 'html.parser')
 		toRemove = ['comparison', 'bgdark', 'bglight', 'default', 'clr', 'novaJanela']
+		baseURL  = 'http://static.weg.net'
 
 		for item in toRemove:
 			if document.select('.{selector}'.format(selector=item)):
@@ -34,9 +35,12 @@ class Parser(object):
 			images = document.select('img')
 
 			for image in images:
-				imagename = os.path.basename(image['src']).lower()
+				filename = os.path.basename(image['src'].replace('http://www.weg.net/', ''))
+				folder   = 'news/images/' + 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
+				path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
+
 				generator.setImage(image, nid, catalog)
-				image.attrs['src'] = 'image-link'
+				image.attrs['src'] = '{base}/{filename}'.format(base=baseURL, filename=path)
 
 		if document.select('.texto'):
 			for element in document.select('.texto'):
@@ -92,7 +96,7 @@ class Parser(object):
 					li.string = ''
 					li.append(span)
 
-		return html.escape( str(document).strip() )
+		return html.escape(str(document)).replace('&quot;', '""').replace('&gt;', '>').replace('&lt;', '<').strip()
 
 
 	@staticmethod
