@@ -32,7 +32,7 @@ class Crawler(object):
 			'id':          nid,
 			'title':       parser.title(title),
 			'subtitle':    parser.subtitle(subtitle),
-			'content':     parser.content(content, nid, catalog),
+			'content':     parser.content(content, nid, catalog, link),
 			'link':        link,
 			'publishDate': parser.date(timestamp),
 			'banner':      parser.banner(banner),
