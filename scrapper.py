@@ -37,7 +37,7 @@ class Scrapper(object):
 					log.error('[{nid}] Tratar erros: {errors}'.format(nid=nid, errors=errors))
 				else:
 					try:
-						log.warning('Iniciando crawling, alvo: {link}'.format(link=link))
+						log.warning('Iniciando crawling, alvo: {url}'.format(url=link))
 						content = crawler.getData(nid, category, language, catalog, link)
 
 						if not content:
@@ -58,7 +58,7 @@ class Scrapper(object):
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
 			# Pegar só 1 notícia por enquanto.
-			# if index == 2:
+			# if index == 39:
 				# exit(0)
 			# return
 
