@@ -32,15 +32,16 @@ class Images(object):
 		for index, image in enumerate(images, start=0):
 			try:
 				if not image['downloaded']:
-					folder   = self.imagesFolder + os.path.dirname(image['path'].replace('http://www.weg.net/', ''))
-					filename = self.imagesFolder + image['path'].replace('http://www.weg.net/', '')
+					filename = os.path.basename(image['path'].replace('http://www.weg.net/', ''))
+					folder   = self.imagesFolder + 'notice-{catalog}-'.format(catalog=image['catalog'].upper()) + str(image['id']).zfill(4)
+					path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
 
 					if not os.path.isdir(folder):
 						os.makedirs(folder, exist_ok=True)
 
-					helper.download(type='image', filename=filename, nid=index, url=image['path'])
+					if helper.download(type='image', filename=path, nid=index, url=image['path']):
+						images[index]['downloaded'] = True
 
-					images[index]['downloaded'] = True
 				else:
 					log.warning('Imagem já baixada [{url}]'.format(url=image['path']))
 			except Exception as error:
