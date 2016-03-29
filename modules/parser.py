@@ -42,6 +42,16 @@ class Parser(object):
 				generator.setImage(image, nid, catalog)
 				image.attrs['src'] = '{base}/{filename}'.format(base=baseURL, filename=path)
 
+		if document.select('a[rel="image-galery-zoom"]'):
+			for link in document.select('a[rel="image-galery-zoom"]'):
+				filename = os.path.basename(link['href'].replace('http://www.weg.net/', ''))
+				folder   = 'news/images/' + 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
+				path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
+
+				generator.setImage(link, nid, catalog)
+				image.attrs['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
+
+
 		if document.select('.texto'):
 			for element in document.select('.texto'):
 				index = element['class'].index('texto')
@@ -78,11 +88,11 @@ class Parser(object):
 				content = helper.readFile(filename)
 
 				if link not in content:
-					helper.createFile(tablefilename, '{link}\n'.format(link=link))
+					helper.createFile(tablefilename, '{link}\n'.format(link=link['href']))
 				else:
-					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link))
+					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link['href']))
 			else:
-				helper.createFile(tablefilename, '{link}\n'.format(link=link))
+				helper.createFile(tablefilename, '{link}\n'.format(link=link['href']))
 				log.success('Log de tabelas criado.')
 					
 
