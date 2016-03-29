@@ -36,7 +36,7 @@ class Crawler(object):
 			'link':        link,
 			'publishDate': parser.date(timestamp),
 			'banner':      parser.banner(banner),
-			'featured':    False,
+			'featured':    'false',
 			'wegMagazine': '',
 			'category':    category,
 			'tags':        parser.tags(tags),
