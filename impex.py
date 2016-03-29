@@ -17,7 +17,7 @@ class Impex(object):
 
 		self.dumpFile    = 'data/news/dump.json'
 		self.impexHeader = '$contentCatalog=institutional{catalog}ContentCatalog\n$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]\n$jarResourceCms=jar:net.weg.institucional.initialdata.setup.InitialDataSystemSetup&/weginstitucionalcore/import/cockpits/cmscockpit\n'
-		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);name;title[lang=pt];subtitle[lang=pt];content[lang=pt];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved'];;{id};NewsPageTemplate;{title};{subtitle};{name};\"{content}\";{category};;;{featured};{date}"
+		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);name;title[lang=pt];subtitle[lang=pt];content[lang=pt];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved']\n;;{id};NewsPageTemplate;{title};{subtitle};{name};\"{content}\";{category};;;{featured};{date}"
 
 		if os.path.isfile(self.dumpFile):
 			self.start()
