@@ -20,7 +20,7 @@ class Generator(object):
 	def setImage(image, nid, catalog):
 		imagesFile = 'data/images.json'
 		images = helper.readFile(imagesFile, format='json') if os.path.isfile(imagesFile) else []
-		imagename = image.get('src')
+		imagename = image.get('src') if image.name == 'img' else image.get('href')
 		baseurl = 'http://www.weg.net'
 
 		if not imagename.startswith('http'):
