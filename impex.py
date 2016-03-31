@@ -17,7 +17,7 @@ class Impex(object):
 
 		self.dumpFile    = 'data/news/dump.json'
 		self.impexHeader = '$contentCatalog=institutional{catalog}ContentCatalog\n$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]\n$jarResourceCms=jar:net.weg.institucional.initialdata.setup.InitialDataSystemSetup&/weginstitucionalcore/import/cockpits/cmscockpit\n'
-		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);name;title[lang=pt];subtitle[lang=pt];content[lang=pt];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved']\n;;{id};NewsPageTemplate;{title};{subtitle};{name};\"{content}\";{category};;;{featured};{date}"
+		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);name;title[lang={language}];subtitle[lang={language}];content[lang={language}];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved']\n;;{id};NewsPageTemplate;{name};{title};{subtitle};\"{content}\";{category};;;{featured};{date}"
 
 		if os.path.isfile(self.dumpFile):
 			self.start()
@@ -31,6 +31,7 @@ class Impex(object):
 
 		for notice in content:
 			try:
+				print(notice)
 				nid       = 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4)
 				link      = notice['link']
 				catalog   = 'data/news/impex/'
@@ -46,7 +47,7 @@ class Impex(object):
 					subtitle = notice['subtitle'],
 					content  = notice['content'],
 					featured = notice['featured'],
-					category = notice['category'],
+					category = notice['category']
 				)
 
 				if os.path.isfile(impexFile):
