@@ -11,6 +11,6 @@ data/news.json
 data/news/images/*
 data/images.json
 
-logs/tables/*
+logs/weg/*
 logs/tags/*.json
 logs/201*.log
