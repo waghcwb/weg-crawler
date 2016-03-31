@@ -52,11 +52,6 @@ class Parser(object):
 				image.attrs['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
 
 
-		if document.select('.texto'):
-			for element in document.select('.texto'):
-				index = element['class'].index('texto')
-				element['class'][index] = 'post-content'
-
 		if document.select('.center'):
 			for center in document.select('.center'):
 				center['class'] = 'text-center'
@@ -66,12 +61,12 @@ class Parser(object):
 
 			for paragraph in paragraphs:
 				for content in paragraph.contents:
-					if content == '\xa0':
+					if content == '\xa0' or not content:
 						paragraph.decompose()
 
 		if document.select('table'):
 			tables = document.select('table')
-			tablefilename = 'logs/tables/tables.list'
+			tablefilename = 'logs/weg/tables.list'
 
 			for table in tables:
 				toRemove = ['cellpadding', 'border', 'cellspacing', 'width', 'height']
@@ -85,9 +80,9 @@ class Parser(object):
 					del table[item]
 
 			if os.path.isfile(tablefilename):
-				content = helper.readFile(filename)
+				content = helper.readFile(tablefilename)
 
-				if link not in content:
+				if str(link['href']) not in str(content):
 					helper.createFile(tablefilename, '{link}\n'.format(link=link['href']))
 				else:
 					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link['href']))
