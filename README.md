@@ -30,9 +30,3 @@ $ ./images.py
 # Run the .impex generator (will generate all impex files)
 $ ./impex.py
 ```
-
-## Meta
-
-Wagner Souza - ([wagh.cwb@gmail.com](mailto:wagh.cwb@gmail.com))
-
-[www.github.com/waghcwb/weg-crawler](https://github.com/waghcwb/weg-crawler)
