@@ -46,6 +46,7 @@ class Scrapper(object):
 							noticesList[index]['status'] = 'completed'
 							notices.append(content)
 							helper.createFile('data/news/dump.json', notices, mode='w', format='json')
+							helper.createFile('logs/weg/notices.list', '[notice-{uid}] {notice}\n'.format(uid=catalog.upper() + str(nid).zfill(4), notice=link))
 							log.success('[{nid}] Dados salvos com sucesso'.format(nid=nid))
 					except Exception as error:
 						log.error(error.args[0])
