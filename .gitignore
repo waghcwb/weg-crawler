@@ -14,3 +14,6 @@ data/images.json
 logs/weg/*
 logs/tags/*.json
 logs/201*.log
+
+weg-images.zip
+weg-impex.zip
