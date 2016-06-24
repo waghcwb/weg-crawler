@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
 folders_to_remove=(
-	'data/news/images/*'
 	'data/images.json'
-	'data/news/impex/*'
-	'data/news/dump.json'
 	'data/notices.json'
-	'logs/tables/*'
-	'logs/tags/*'
+	'data/news/dump.json'
+	'data/news/images/notice-*'
+	'data/news/impex/*.impex'
+	'logs/*.log'
 )
 
 x=0;
