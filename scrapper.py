@@ -59,8 +59,8 @@ class Scrapper(object):
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
 			# Pegar só 1 notícia por enquanto.
-			# if index == 6:
-				# exit(0)
+			# if index == 5:
+			# 	exit(0)
 			# return
 
 
