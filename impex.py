@@ -17,7 +17,7 @@ class Impex(object):
 
 		self.dumpFile    = 'data/news/dump.json'
 		self.impexHeader = '$contentCatalog=institutional{catalog}ContentCatalog\n$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]\n$jarResourceCms=jar:net.weg.institucional.initialdata.setup.InitialDataSystemSetup&/weginstitucionalcore/import/cockpits/cmscockpit\n'
-		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);name;title[lang={language}];subtitle[lang={language}];content[lang={language}];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved']\n;;{id};NewsPageTemplate;{name};{title};{subtitle};\"{content}\";{category};;;{featured};{date}"
+		self.notice      = "\n\nINSERT_UPDATE NewsPage;$contentCV[unique=true];uid[unique=true];masterTemplate(uid,$contentCV);name;title[lang={language}][allownull=true];subtitle[lang={language}][allownull=true];content[lang={language}][allownull=true];category(code);tags(code);hiddentags(code);featured;publishdate[dateformat=dd/MM/yyyy];banner(code);defaultPage[default='true'];approvalStatus(code)[default='approved']\n;;{id};NewsPageTemplate;{name};{title};{subtitle};\"{content}\";{category};;;{featured};{date}"
 
 		if os.path.isfile(self.dumpFile):
 			self.start()
@@ -31,20 +31,22 @@ class Impex(object):
 
 		for notice in content:
 			try:
-				print(notice)
-				nid       = 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4)
-				link      = notice['link']
-				catalog   = 'data/news/impex/'
-				filename  = '{catalog}.impex'.format(catalog=notice['catalog'])
-				impexFile = '{catalog}/{filename}'.format(catalog=catalog, filename=filename)
+				nid          = 'notice-{catalog}-'.format(catalog=notice['catalog'].upper()) + str(notice['id']).zfill(4)
+				link         = notice['link']
+				catalog      = 'data/news/impex/'
+				filename     = '{catalog}-{language}.impex'.format(catalog=notice['catalog'], language=notice['language'])
+				impexFile    = '{catalog}/{filename}'.format(catalog=catalog, filename=filename)
+				ellipses     = '...'
+				maxTitleSize = 140 - len( ellipses )
+				maxNameSize  = 255 - len( ellipses )
 
 				impex = self.notice.format(
 				 	id       = nid,
-					title    = notice['title'],
-					name     = notice['title'],
+					title    = notice['title'] if len( notice['title'] ) < maxTitleSize else notice['title'][:maxTitleSize] + ellipses,
+					name     = notice['title'] if len( notice['title'] ) < maxNameSize else notice['title'][:maxNameSize] + ellipses,
 					language = notice['language'],
 					date     = notice['publishDate'],
-					subtitle = notice['subtitle'],
+					subtitle = notice['subtitle'] if len( notice['subtitle'] ) < maxTitleSize else notice['subtitle'][:maxTitleSize] + ellipses,
 					content  = notice['content'],
 					featured = notice['featured'],
 					category = notice['category']

@@ -43,7 +43,7 @@ class Scrapper(object):
 						if not content:
 							raise Exception('Título, subtítulo ou conteúdo não encontrados no documento: {url}'.format(url=link))
 						else:
-							noticesList[index]['status'] = 'completed'
+							noticesList[ index ]['status'] = 'completed'
 							notices.append(content)
 							helper.createFile('data/news/dump.json', notices, mode='w', format='json')
 							helper.createFile('logs/weg/notices.list', '[notice-{uid}] {notice}\n'.format(uid=catalog.upper() + str(nid).zfill(4), notice=link))
@@ -53,15 +53,14 @@ class Scrapper(object):
 						noticesList[index]['errors'].append(error)
 						pass
 					finally:
-						helper.createFile('data/notices.json', noticesList, mode='w', format='json')
+						helper.createFile('data/notices.json', json.dumps(noticesList, indent=4, sort_keys=True), mode='w')
 						time.sleep(20)
 			else:
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
 			# Pegar só 1 notícia por enquanto.
-			# if index == 5:
-			# 	exit(0)
-			# return
+			if index == 10:
+				exit(0)
 
 
 if __name__ == '__main__':
