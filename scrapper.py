@@ -41,7 +41,9 @@ class Scrapper(object):
 						content = crawler.getData(nid, category, language, catalog, link)
 
 						if not content:
-							raise Exception('Título, subtítulo ou conteúdo não encontrados no documento: {url}'.format(url=link))
+							raise ValueError('Título, subtítulo ou conteúdo não encontrados no documento: {url}')
+						if content == 404:
+							raise ValueError('Página não encontrada')
 						else:
 							noticesList[ index ]['status'] = 'completed'
 							notices.append(content)
