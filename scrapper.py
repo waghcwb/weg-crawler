@@ -56,7 +56,7 @@ class Scrapper(object):
 						pass
 					finally:
 						helper.createFile('data/notices.json', json.dumps(noticesList, indent=4, sort_keys=True), mode='w')
-						time.sleep(20)
+						time.sleep(3)
 			else:
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
