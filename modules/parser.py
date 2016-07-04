@@ -23,6 +23,7 @@ class Parser(object):
 
 		document = BeautifulSoup(content[0].encode('utf-8'), 'html.parser')
 		toRemove = ['comparison', 'bgdark', 'bglight', 'default', 'clr', 'novaJanela']
+		imageBaseURL = 'news/'
 		baseURL  = 'http://static.weg.net'
 
 		for item in toRemove:
@@ -36,21 +37,21 @@ class Parser(object):
 
 			for image in images:
 				filename = os.path.basename(image['src'].replace('http://www.weg.net/', ''))
-				folder   = 'news/images/' + 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
+				folder   = imageBaseURL + 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
 				path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
 
 				generator.setImage(image, nid, catalog)
+
 				image.attrs['src'] = '{base}/{filename}'.format(base=baseURL, filename=path)
 
 		if document.select('a[rel="image-galery-zoom"]'):
 			for link in document.select('a[rel="image-galery-zoom"]'):
 				filename = os.path.basename(link['href'].replace('http://www.weg.net/', ''))
-				folder   = 'news/images/' + 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
+				folder   = imageBaseURL + 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
 				path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
 
 				generator.setImage(link, nid, catalog)
 				image.attrs['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
-
 
 		if document.select('.center'):
 			for center in document.select('.center'):
@@ -87,7 +88,7 @@ class Parser(object):
 				else:
 					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link['href']))
 			else:
-				helper.createFile(tablefilename, '{link}\n'.format(link=link['href']))
+				helper.createFile(tablefilename, '{link}\n'.format(link=link))
 				log.success('Log de tabelas criado.')
 					
 
