@@ -43,7 +43,7 @@ class Helper(object):
 			_file.write(content)
 			_file.close()
 		except Exception as error:
-			log.error(error.args[0])
+			log.error( error )
 			pass
 
 
