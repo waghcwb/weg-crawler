@@ -41,8 +41,8 @@ class Scrapper(object):
 						content = crawler.getData(nid, category, language, catalog, link)
 
 						if not content:
-							raise ValueError('Título, subtítulo ou conteúdo não encontrados no documento: {url}')
-						if content == 404:
+							raise ValueError('Título, subtítulo ou conteúdo não encontrados no documento: {url}'.format(url=link))
+						elif content == 404:
 							raise ValueError('Página não encontrada')
 						else:
 							noticesList[ index ]['status'] = 'completed'
@@ -51,22 +51,21 @@ class Scrapper(object):
 							helper.createFile('logs/weg/notices.list', '[notice-{uid}] {notice}\n'.format(uid=catalog.upper() + str(nid).zfill(4), notice=link))
 							log.success('[{nid}] Dados salvos com sucesso'.format(nid=nid))
 					except Exception as error:
-						log.error(error.args[0])
+						log.error(error)
 						noticesList[index]['errors'].append(error)
 						pass
 					finally:
-						helper.createFile('data/notices.json', json.dumps(noticesList, indent=4, sort_keys=True), mode='w')
-						time.sleep(3)
+						helper.createFile('data/notices.json', noticesList, mode='w', format='json')
+						# time.sleep(3)
 			else:
 				log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
 
 			# Pegar só 1 notícia por enquanto.
-			# if index == 10:
-			# 	exit(0)
+			if index == 1:
+				exit(0)
 
 
 if __name__ == '__main__':
 	scrapper = Scrapper()
 	scrapper.start()
 	log.success('Finalizando processo: {proccess}'.format(proccess=os.getpid()))
-	exit(0)
