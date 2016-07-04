@@ -65,31 +65,31 @@ class Parser(object):
 					if content == '\xa0' or not content:
 						paragraph.decompose()
 
-		if document.select('table'):
-			tables = document.select('table')
-			tablefilename = 'logs/weg/tables.list'
+		# if document.select('table'):
+		# 	tables = document.select('table')
+		# 	tablefilename = 'logs/weg/tables.list'
 
-			for table in tables:
-				toRemove = ['cellpadding', 'border', 'cellspacing', 'width', 'height']
-				responsive = document.new_tag('div')
-				responsive['class'] = 'table-responsive'
-				table.wrap(responsive)
+		# 	for table in tables:
+		# 		toRemove = ['cellpadding', 'border', 'cellspacing', 'width', 'height']
+		# 		responsive = document.new_tag('div')
+		# 		responsive['class'] = 'table-responsive'
+		# 		table.wrap(responsive)
 
-				table['class'].append('table table-bordered table-hover')
+		# 		table['class'].append('table table-bordered table-hover')
 
-				for item in toRemove:
-					del table[item]
+		# 		for item in toRemove:
+		# 			del table[item]
 
-			if os.path.isfile(tablefilename):
-				content = helper.readFile(tablefilename)
+		# 	if os.path.isfile(tablefilename):
+		# 		content = helper.readFile(tablefilename)
 
-				if str(link['href']) not in str(content):
-					helper.createFile(tablefilename, '{link}\n'.format(link=link['href']))
-				else:
-					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link['href']))
-			else:
-				helper.createFile(tablefilename, '{link}\n'.format(link=link))
-				log.success('Log de tabelas criado.')
+		# 		if str(link['href']) not in str(content):
+		# 			helper.createFile(tablefilename, '{link}\n'.format(link=link['href']))
+		# 		else:
+		# 			log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link['href']))
+		# 	else:
+		# 		helper.createFile(tablefilename, '{link}\n'.format(link=link))
+		# 		log.success('Log de tabelas criado.')
 					
 
 		if document.select('ul'):
