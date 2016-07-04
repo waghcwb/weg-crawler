@@ -64,7 +64,7 @@ class Impex(object):
 					helper.createFile(impexFile, self.impexHeader.format(catalog=notice['catalog'].capitalize()) + impex)
 					log.success('Notícia adicionada no impex [{id}]'.format(id=nid))					
 			except Exception as error:
-				log.error(error.args[0])
+				log.error(error)
 				pass
 
 
