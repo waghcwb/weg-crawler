@@ -15,7 +15,12 @@ class Crawler(object):
 
 	@staticmethod
 	def getData(nid, category, language, catalog, link, parser='html.parser'):
-		html = BeautifulSoup(requests.get(link).text, parser)
+		request = requests.get(link)
+
+		if request.status_code === 404:
+			return
+
+		html = BeautifulSoup(request.text, parser)
 		return Crawler.parseData(html, nid, category, language, catalog, link)
 
 
