@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 from modules.logger    import Logger as log
 from modules.generator import Generator as generator
