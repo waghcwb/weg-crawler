@@ -5,11 +5,11 @@ __pycache__
 data/*.json
 
 data/news/impex/*
+data/news/images/*
 data/news/dump.json
+data/images.json
 data/news.json
 
-data/news/images/*
-data/images.json
 
 logs/weg/*
 logs/tags/*.json
