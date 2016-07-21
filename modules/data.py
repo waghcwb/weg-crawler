@@ -20,6 +20,9 @@ class Data(object):
 		if item == 'images':
 			return Data.getImages()
 
+		if item == 'dump':
+			return Data.getDump()
+
 
 	@staticmethod
 	def getImages():
@@ -39,3 +42,14 @@ class Data(object):
 			return helper.readFile(noticesFile, format='json')
 		else:
 			return generator.setNotices()
+
+
+	@staticmethod
+	def getDump():
+		dumpFile = 'data/news/dump.json'
+
+		if os.path.isfile('data/news/dump.json'):
+			return helper.readFile(dumpFile, format='json')
+		else:
+			return False
+		
