@@ -11,6 +11,7 @@ folders_to_remove=(
 	'logs/weg/tables.list'
 	'weg-images.zip'
 	'weg-impex.zip'
+	'weg-logs.zip'
 )
 
 x=0;
