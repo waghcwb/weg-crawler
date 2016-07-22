@@ -45,6 +45,21 @@ class Parser(object):
 				image.attrs['src'] = '{base}/{filename}'.format(base=baseURL, filename=path)
 				image['class'] = 'img-responsive'
 
+		if document.select('.coluna6'):
+			columns = document.select('.coluna6')
+
+			for column in columns:
+				column['class'] = 'xtt-gallery pull-right'
+
+		if document.select('a[rel="image-zoom"]'):
+			for link in document.select('a[rel="image-zoom"]'):
+				filename = os.path.basename(link['href'].replace('http://www.weg.net/', ''))
+				folder   = imageBaseURL + 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
+				path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
+
+				generator.setImage(link, nid, catalog)
+				image.attrs['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
+
 		if document.select('a[rel="image-galery-zoom"]'):
 			for link in document.select('a[rel="image-galery-zoom"]'):
 				filename = os.path.basename(link['href'].replace('http://www.weg.net/', ''))
