@@ -52,7 +52,7 @@ class Logger(object):
 			file = main.__file__
 		)
 
-		print(message)
+		print( message )
 
 		with open('logs/{time}.log'.format(time=time.strftime('%Y-%m-%d')), 'a+', encoding='utf-8') as file:
 			file.write(log)
