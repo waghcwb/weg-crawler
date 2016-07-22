@@ -21,20 +21,23 @@ class Scrapper( object ):
         notices = []
 
         for index, notice in enumerate( notices_list, start=0 ):
-            nid      = notice['id']
-            link     = notice['link']
-            category = notice['category']
-            errors   = notice['errors']
-            status   = notice['status']
-            language = notice['language']
-            catalog  = notice['catalog']
+            nid          = notice['id']
+            link         = notice['link']
+            category     = notice['category']
+            errors       = notice['errors']
+            status       = notice['status']
+            language     = notice['language']
+            catalog      = notice['catalog']
+            init_message = 'Iniciando crawling, alvo: {url}'.format(url=os.path.basename(link))
 
             if status == 'pending':
                 if errors:
                     log.error('[{nid}] Tratar erros: {errors}'.format(nid=nid, errors=errors))
                 else:
                     try:
-                        log.warning('Iniciando crawling, alvo: {url}'.format(url=link))
+                        print()
+                        log.success( init_message )
+                        log.success( '*' * len( init_message ) )
 
                         content = crawler.getData(nid, category, language, catalog, link)
 
@@ -56,6 +59,8 @@ class Scrapper( object ):
                         pass
                     finally:
                         helper.createFile('data/notices.json', notices_list, mode='w', format='json')
+                        log.success( '*' * len( init_message ) )
+                        print()
                         # time.sleep(3)
             else:
                 log.warning('Dados dessa notícia já foram adquiridos [{nid}]'.format(nid=nid))
