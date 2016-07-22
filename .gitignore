@@ -16,6 +16,7 @@ logs/tags/*.json
 logs/201*.log
 
 weg-images.zip
+weg-logs.zip
 weg-impex.zip
 
 .idea/
