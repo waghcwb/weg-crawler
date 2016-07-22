@@ -84,6 +84,8 @@ class Parser(object):
 		if document.select('table'):
 			tables = document.select('table')
 			tablefilename = 'logs/weg/tables.list'
+			link = link if isinstance( link, str ) else link['href']
+			notice_id = 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
 
 			for table in tables:
 				toRemove = ['cellpadding', 'border', 'cellspacing', 'width', 'height']
@@ -96,15 +98,15 @@ class Parser(object):
 				for item in toRemove:
 					del table[ item ]
 
-			if os.path.isfile(tablefilename):
+			if os.path.isfile( tablefilename ):
 				content = helper.readFile( tablefilename )
 
 				if link not in content:
-					helper.createFile(tablefilename, '{link}\n'.format(link=link))
+					helper.createFile(tablefilename, '{nid} {link}\n'.format(link=link, nid=notice_id))
 				else:
 					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link))
 			else:
-				helper.createFile(tablefilename, '{link}\n'.format(link=link))
+				helper.createFile(tablefilename, '{nid} {link}\n'.format(link=link, nid=notice_id))
 				log.success('Log de tabelas criado.')
 
 
