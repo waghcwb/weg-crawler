@@ -79,15 +79,15 @@ class Parser(object):
 				table['class'].append('table table-bordered table-hover')
 
 				for item in toRemove:
-					del table[item]
+					del table[ item ]
 
 			if os.path.isfile(tablefilename):
-				content = helper.readFile(tablefilename)
+				content = helper.readFile( tablefilename )
 
-				if str(link['href']) not in str(content):
-					helper.createFile(tablefilename, '{link}\n'.format(link=link['href']))
+				if link not in content:
+					helper.createFile(tablefilename, '{link}\n'.format(link=link))
 				else:
-					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link['href']))
+					log.warning('Tabela já adicionada para a lista [{url}]'.format(url=link))
 			else:
 				helper.createFile(tablefilename, '{link}\n'.format(link=link))
 				log.success('Log de tabelas criado.')
