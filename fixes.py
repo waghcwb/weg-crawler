@@ -20,8 +20,25 @@ class Fixer( object ):
 
 		if os.path.isfile(self.dumpFile):
 			self.gallery_links()
+			self.responsive_images()
 		else:
 			log.error('Arquivo de dump não existe.')
+
+
+	def responsive_images( self ):
+		dump = data.get('dump')
+
+		for index, item in enumerate(dump, start=0):
+			document = BeautifulSoup(item['content'].replace('""', '"'), 'html.parser')
+
+			if document.find('img'):
+				images = document.select('img')
+
+				for image in images:
+					image['class'] = 'img-responsive'
+					dump[ index ]['content'] = str( document )
+
+					helper.createFile('data/news/dump.json', dump, mode='w', format='json')
 
 
 	def gallery_links( self ):
@@ -32,17 +49,19 @@ class Fixer( object ):
 			baseURL  = 'http://static.weg.net'
 			imageBaseURL = 'news/'
 
-		if document.select('a[rel="image-zoom"]'):
-			links = document.select('a[rel="image-zoom"]')
+			if document.select('a[rel="image-zoom"]'):
+				links = document.select('a[rel="image-zoom"]')
 
-			for link in links:
-				filename = os.path.basename(link['href'].replace('http://www.weg.net/', ''))
-				folder   = imageBaseURL + 'notice-{catalog}-'.format(catalog=item['catalog'].upper()) + str(item['id']).zfill(4)
-				path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
+				for link in links:
+					filename = os.path.basename(link['href'].replace('http://www.weg.net/', ''))
+					folder   = imageBaseURL + 'notice-{catalog}-'.format(catalog=item['catalog'].upper()) + str(item['id']).zfill(4)
+					path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
 
-				link.attrs['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
+					link.attrs['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
 
-				generator.setImage(link, item['id'], item['catalog'])
+					generator.setImage(link, item['id'], item['catalog'])
+					dump[ index ]['content'] = str( document )
+					helper.createFile('data/news/dump.json', dump, mode='w', format='json')
 
 
 if __name__ == '__main__':
