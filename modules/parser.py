@@ -118,7 +118,7 @@ class Parser(object):
 					li.string = ''
 					li.append(span)
 
-		return html.escape(str(document)).replace('&quot;', '""').replace('&gt;', '>').replace('&lt;', '<').strip()
+		return str( document ).replace('"', '""').strip()
 
 
 	@staticmethod
