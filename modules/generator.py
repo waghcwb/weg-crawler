@@ -19,27 +19,26 @@ class Generator(object):
 	@staticmethod
 	def setImage(image, nid, catalog):
 		imagesFile = 'data/images.json'
-		images = helper.readFile(imagesFile, format='json') if os.path.isfile(imagesFile) else []
-		imagename = image.get('src') if image.name == 'img' else image.get('href')
-		baseurl = 'http://www.weg.net'
+		images     = helper.readFile(imagesFile, format='json') if os.path.isfile(imagesFile) else []
+		imagename  = image.get('src') if image.name == 'img' else image.get('href')
+		baseurl    = 'http://www.weg.net'
+		notice     = 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4)
 
 		if not imagename.startswith('http'):
 			imagename = baseurl + imagename
 
 		try:
-			if not imagename in json.dumps(images):
-				images.append({
-					'id': nid,
-					'catalog': catalog,
-					'downloaded': False,
-					'notice': 'notice-{catalog}-'.format(catalog=catalog.upper()) + str(nid).zfill(4),
-					'path': imagename,
-					'type': 'image'
-				})
+			images.append({
+				'id': nid,
+				'catalog': catalog,
+				'downloaded': False,
+				'notice': notice,
+				'path': imagename,
+				'type': 'image'
+			})
 
-				log.success('Imagem setada [{url}]'.format(url=imagename))
-			else:
-				log.warning('Imagem já adicionada para fazer download [{url}]'.format(url=imagename))
+			log.success('Imagem setada [{url}]'.format(url=os.path.basename(imagename)))
+					
 		except Exception as error:
 			log.error('Erro ao adicionar a imagem para a lista [{url}]'.format(url=imagename))
 			log.error(error.args[0])
