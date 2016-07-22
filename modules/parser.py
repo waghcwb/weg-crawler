@@ -58,7 +58,7 @@ class Parser(object):
 				path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
 
 				generator.setImage(link, nid, catalog)
-				image.attrs['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
+				link['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
 
 		if document.select('a[rel="image-galery-zoom"]'):
 			for link in document.select('a[rel="image-galery-zoom"]'):
@@ -67,7 +67,7 @@ class Parser(object):
 				path     = '{folder}/{filename}'.format(folder=folder, filename=filename)
 
 				generator.setImage(link, nid, catalog)
-				image.attrs['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
+				link['href'] = '{base}/{filename}'.format(base=baseURL, filename=path)
 
 		if document.select('.center'):
 			for center in document.select('.center'):
