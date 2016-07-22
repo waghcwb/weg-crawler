@@ -7,6 +7,8 @@ folders_to_remove=(
 	'data/news/images/notice-*'
 	'data/news/impex/*.impex'
 	'logs/*.log'
+	'logs/weg/notices.list'
+	'logs/weg/tables.list'
 	'weg-images.zip'
 	'weg-impex.zip'
 )
