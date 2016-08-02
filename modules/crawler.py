@@ -1,47 +1,34 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-from modules.parser import Parser as parser
-from datetime       import datetime
+from modules.logger import Logger as log
+from modules.helper import Helper as helper
 from bs4            import BeautifulSoup
 
 import requests
+import os
+import modules.parser as parser
 
+class Crawler( object ):
+    def __init__( self ):
+        super( Crawler, self ).__init__()
 
-class Crawler(object):
-	def __init__(self):
-		super(Crawler, self).__init__()
+    def download_news( self, news ):
+        init_crawling = '= Iniciando crawling, alvo: [ {nid} ] {link}'.format(nid=news['id'], link=os.path.basename( news['link'] ))
 
+        print()
 
-	@staticmethod
-	def getData(nid, category, language, catalog, link, parser='html.parser'):
-		html = BeautifulSoup(requests.get(link).text, parser)
-		return Crawler.parseData(html, nid, category, language, catalog, link)
+        log.success( '=' * len( init_crawling ) )
+        log.success( init_crawling )
+        log.success( '=' * len( init_crawling ) )
 
+        print()
 
-	@staticmethod
-	def parseData(document, nid, category, language, catalog, link):
-		title       = document.select('.noticia-titulo h1')
-		subtitle    = document.select('.noticia-titulo h2')
-		tags        = document.select('.tags a')
-		banner      = document.select('.imagem-corpo-noticia img')
-		content     = document.select('.coluna5 .texto')
-		timestamp   = document.select('.noticia-detalhe .data')
+        request = requests.get( news['link'] )
+        document = BeautifulSoup( request.text, 'html.parser' )
 
-		data = {
-			'id':          nid,
-			'title':       parser.title(title),
-			'subtitle':    parser.subtitle(subtitle),
-			'content':     parser.content(content, nid, catalog, link),
-			'link':        link,
-			'publishDate': parser.date(timestamp),
-			'banner':      parser.banner(banner),
-			'featured':    'false',
-			'wegMagazine': '',
-			'category':    category,
-			'tags':        parser.tags(tags),
-			'language':    language,
-			'catalog':     catalog
-		}
-
-		return data
+        if request.status_code == 200:
+            return parser.parse_news( news, document )
+        else:
+            error_message = 'Erro ao acessar a página: Status {status_code}'.format(status_code=request.status_code)
+            self.errors.append( error_message )
+            log.error( error_message )

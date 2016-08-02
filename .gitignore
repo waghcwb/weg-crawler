@@ -5,11 +5,7 @@ __pycache__
 data/*.json
 
 data/news/impex/*
-data/news/dump.json
-data/news.json
-
-data/news/images/*
-data/images.json
+data/news/images/notice-*
 
 logs/weg/*
 logs/tags/*.json
@@ -17,3 +13,4 @@ logs/201*.log
 
 weg-images.zip
 weg-impex.zip
+weg-logs.zip

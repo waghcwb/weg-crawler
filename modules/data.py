@@ -1,41 +1,59 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-from modules.generator import Generator as generator
-from modules.helper    import Helper as helper
+from modules.logger  import Logger as log
+from modules.helper  import Helper as helper
+from modules.crawler import Crawler as crawler
 
+import re
 import os
-import json
 
 
-class Data(object):
-	def __init__(self):
-		super(Data, self).__init__()
+class Data( crawler ):
+    def __init__( self ):
+        super( Data, self ).__init__()
 
-	@staticmethod
-	def get(item):
-		if item == 'notices.list':
-			return Data.getNotices()
+        self.news_list_file = 'data/notices.list'
+        self.news_json_file = 'data/notices.json'
+        self.dump_file = 'data/dump.json'
+        self.proccess = os.getpid()
+        self.errors = []
+        self.news_id_length = 4
 
-		if item == 'images':
-			return Data.getImages()
+        init_message = 'Iniciando processo: {proccess}'.format(proccess=self.proccess)
+       
+        log.success( '=' * len( init_message ) )
+        log.success( init_message )
+        log.success( '=' * len( init_message ) )
+        print()
 
+    def create_news_list( self ):
+        news_list = helper.read_file(filename=self.news_list_file)
+        news = []
+        catalog = None
+        nid = 0
 
-	@staticmethod
-	def getImages():
-		imagesFile = 'data/images.json'
+        for line in news_list.split('\n'):
+            if re.search('\[.*\]', line):
+                catalog = line.replace('[', '').replace(']', '').replace('\n', '')
+            else:
+                if line:
+                    notice   = 'notice-{catalog}-{id}'.format(catalog=catalog.upper(), id=str( nid ).zfill( self.news_id_length ))
+                    link     = line.split(',')[0]
+                    language = line.split(',')[1]
+                    category = line.split(',')[2]
 
-		if os.path.isfile(imagesFile):
-			return helper.readFile(imagesFile, format='json')
-		else:
-			return generator.setImagesList()
+                    news.append({
+                        'id': notice,
+                        'link': link,
+                        'language': language,
+                        'category': category,
+                        'errors': [],
+                        'status': 'pending',
+                        'catalog': catalog
+                    })
 
+                    nid += 1
+        
+        helper.create_file(filename='data/notices.json', content=news, format='json', mode='w')
 
-	@staticmethod
-	def getNotices():
-		noticesFile = 'data/notices.json'
-
-		if os.path.isfile(noticesFile):
-			return helper.readFile(noticesFile, format='json')
-		else:
-			return generator.setNotices()
+        return news
