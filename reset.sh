@@ -6,12 +6,10 @@ files_to_remove=(
     'data/news/images/notice-*'
     'data/news/impex/*.impex'
     
-    'logs/*.log'
+    'logs/20*.log'
     'logs/weg/*.list'
 
-    'weg-images.zip'
-    'weg-impex.zip'
-    'weg-logs.zip'
+    'weg-*.zip'
 )
 
 x=0;
