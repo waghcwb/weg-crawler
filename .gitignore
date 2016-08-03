@@ -6,17 +6,11 @@ data/*.json
 
 data/news/impex/*
 data/news/images/*
-data/news/dump.json
-data/images.json
-data/news.json
 
 
-logs/weg/*
-logs/tags/*.json
+logs/weg/*.list
 logs/201*.log
 
-weg-images.zip
-weg-logs.zip
-weg-impex.zip
+weg-*.zip
 
 .idea/
