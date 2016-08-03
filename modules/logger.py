@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 import __main__ as main
 import time
 
 
-class Logger(object):
-	def __init__(self):
-		super(Logger, self).__init__()
-
+class Logger( object ):
+	def __init__( self ):
+		super( Logger, self ).__init__()
 
 	@staticmethod
 	def log(message, messageType='default', color='green'):
@@ -16,7 +14,7 @@ class Logger(object):
 			return False
 
 		now = time.strftime('%Y-%m-%d %H:%M:%S')
-		message = str(message).encode('utf-8')
+		message = str( message ).encode('utf-8')
 
 		colors = {
 		    'red': '\033[0;31m',
@@ -42,7 +40,7 @@ class Logger(object):
 		)
 
 		message = '{color}[ {type} ]{reset} {gray}[{time}]{reset} {white}{message}{reset} [{file}]'.format(
-			color = colors[color],
+			color = colors[ color ],
 			type = ' ' + messageType.upper() + ' ' if messageType == 'error' else messageType.upper(),
 			reset = colors['reset'],
 			gray = colors['gray'],
@@ -59,16 +57,13 @@ class Logger(object):
 
 		return True
 
-
 	@staticmethod
 	def success(message):
 		Logger.log(message, 'success')
 
-
 	@staticmethod
 	def error(message):
 		Logger.log(message, 'error')
-
 
 	@staticmethod
 	def warning(message):
