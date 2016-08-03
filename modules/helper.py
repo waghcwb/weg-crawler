@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 from modules.logger import Logger as log
 
@@ -10,10 +9,9 @@ import shutil
 import requests
 
 
-class Helper(object):
-	def __init__(self):
-		super(Helper, self).__init__()
-
+class Helper( object ):
+	def __init__( self ):
+		super( Helper, self ).__init__()
 
 	@staticmethod
 	def download(type, filename, nid, url):
@@ -30,9 +28,8 @@ class Helper(object):
 				log.error(error)
 				pass
 
-
 	@staticmethod
-	def createFile(filename, content, mode='a+', encoding='utf-8', format=None):
+	def create_file(filename, content, mode='a+', encoding='utf-8', format=None):
 		os.chdir(sys.path[0])
 
 		try:
@@ -46,24 +43,22 @@ class Helper(object):
 			log.error( error )
 			pass
 
-
 	@staticmethod
-	def readFile(filename, format=None, mode='r', encoding='utf-8'):
+	def read_file(filename, format=None, mode='r', encoding='utf-8'):
 		os.chdir(sys.path[0])
 
 		if not os.path.isfile(filename):
-			log.error('O arquivo não existe [{file}]'.format(file=filename))
 			return None
 		else:
 			try:
-				_file = open(filename, mode=mode, encoding=encoding)
+				_file = open( filename, mode=mode, encoding=encoding )
 				_content = _file.read()
 				_file.close()
 
 				if format == 'json':
-					return json.loads(_content)
+					return json.loads( _content )
 				else:
 					return _content
 			except Exception as error:
-				log.error(error.args[0])
+				log.error( error.args[0] )
 				pass

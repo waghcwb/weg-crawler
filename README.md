@@ -3,17 +3,12 @@
 
 ## Installation
 
-Linux:
-
 ```sh
 # Install pip
 $ sudo apt-get install python-pip
 
-# Install requests (use sudo if necessary)
-$ pip install requests
-
-# Install BeautifulSoup
-$ pip install beautifulsoup4
+# Install dependencies
+$ pip install -r requirements.conf
 
 # Make executables
 $ sudo chmod +x scrapper.py images.py impex.py reset.sh
