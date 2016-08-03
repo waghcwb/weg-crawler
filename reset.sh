@@ -1,28 +1,34 @@
 #!/usr/bin/env bash
 
-folders_to_remove=(
-	'data/*.json'
-	'data/news/impex/*'
-	'data/news/images/notice-*'
-	'logs/weg/*'
-	'logs/tags/*.json'
-	'logs/201*.log'
-	'weg-images.zip'
-	'weg-impex.zip'
-	'weg-logs.zip'
+files_to_remove=(
+    'data/*.json'
+    
+    'data/news/images/notice-*'
+    'data/news/impex/*.impex'
+    
+    'logs/*.log'
+    'logs/weg/*.list'
+
+    'weg-images.zip'
+    'weg-impex.zip'
+    'weg-logs.zip'
 )
-
-
 
 x=0;
 
-while [ $x != ${#folders_to_remove[@]} ]
+while [ $x != ${#files_to_remove[@]} ]
 do
-	folder=${folders_to_remove[$x]}
+    _file=${files_to_remove[$x]}
 
-	echo "Pasta apagada: ${folder}"
+    if [ ! -s ${_file} ]; then
+        echo "[ ! ] Arquivo inexistente - ${_file}"
+    elif [ -d ${_file} ]; then
+        echo "[ ✔ ] Diretório apagado - ${_file}"
+        rm -rf ${_file}
+    else
+        echo "[ ✔ ] Arquivo apagado - ${_file}"
+        rm ${_file}
+    fi
 
-	rm -rf ${folder}
-
-	let "x = x +1"
+    let "x = x +1"
 done
