@@ -1,9 +1,5 @@
-language: python
+before_script:
+  - pip install -r requirements.conf
 
-python:
-  - '3.2'
-  - '3.3'
-  - '3.4'
-  - '3.5'
-
-install: 'pip install -r requirements.conf'
+script:
+  - ./migrate.sh
