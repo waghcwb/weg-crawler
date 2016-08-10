@@ -1,5 +1,5 @@
 # WEB Crawler
-> Crawler to extract notices from [WEG](http://www.weg.net) website
+Crawler to extract news from the [WEG](http://www.weg.net) site
 
 ## Installation
 
