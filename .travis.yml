@@ -1,6 +1,0 @@
-before_script:
-  - pip install -r requirements.conf
-
-test:
-  script:
-    - ./migrate.sh
