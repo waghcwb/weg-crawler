@@ -12,7 +12,7 @@ class Images( object ):
         super( Images, self ).__init__()
 
         self.images_file = 'data/images.json'
-        self.images_folder = 'data/news/images/'
+        self.images_folder = 'data/news/'
         self.dump_file     = 'data/news/dump.json'
 
         if os.path.isfile( self.images_file ):
@@ -21,7 +21,7 @@ class Images( object ):
             for index, image in enumerate(images, start=0):
                 try:
                     if not image['downloaded']:
-                        path = 'data/{image_path}'.format(image_path=image['new_path'].replace('http://static.weg.net/', ''))
+                        path = 'data/{image_path}'.format(image_path=image['new_path'].replace('https://static.weg.net/', ''))
                         filename = os.path.basename( path )
                         folder = path.split('/')
                         folder.pop()

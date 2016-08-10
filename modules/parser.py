@@ -171,9 +171,9 @@ def set_image( news, index, link ):
 
 
 def set_image_link( news, index, link ):
-    base_url  = 'http://static.weg.net'
+    base_url  = 'https://static.weg.net'
     filename = os.path.basename( link )
-    path = 'news/images/{nid}/{filename}'.format(nid=news['id'], filename=filename)
+    path = 'news/{nid}/{filename}'.format(nid=news['id'], filename=filename)
     parse_filename = path.split('.')
     parse_filename[0] = '{base_url}/{filename}_{suffix}'.format(base_url=base_url, filename=parse_filename[0][:255 - ( len( parse_filename[1] ) + len( base_url ) )], suffix=str( index ).zfill(4))
     filename = '.'.join( parse_filename )
