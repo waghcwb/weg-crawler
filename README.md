@@ -1,4 +1,4 @@
-# WEB Crawler
+# WEG Crawler
 Crawler to extract news from the [WEG](http://www.weg.net) site
 
 ## Installation

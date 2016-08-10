@@ -77,7 +77,8 @@ def get_content( news, content ):
     if document.select('table'):
             tables = document.select('table')
             tablefilename = 'logs/weg/tables.list'
-            link = link if isinstance( link, str ) else link['href']
+            link = link if isinstance( link, str ) else link.attrs['href']
+            table_log = '[ {nid} ]: {link}\n'.format(link=link, nid=nid)
 
             for table in tables:
                 to_remove = ['cellpadding', 'border', 'cellspacing', 'width', 'height']
@@ -92,7 +93,6 @@ def get_content( news, content ):
 
             if os.path.isfile( tablefilename ):
                 content = helper.read_file( tablefilename )
-                table_log = '[ {nid} ]: {link}\n'.format(link=link, nid=nid)
 
                 if link not in content:
                     helper.create_file(tablefilename, table_log)
@@ -104,15 +104,16 @@ def get_content( news, content ):
 
     if document.select('a'):
         for index, link in enumerate( document.select('a'), start=0 ):
-            filename, file_extension = os.path.splitext( link.attrs['href'] )
+            if 'href' in link.attrs:
+                filename, file_extension = os.path.splitext( link.attrs['href'] )
 
-            if link.attrs['href'] == 'javascript:void();':
-                link.attrs['href'] = '#{nid}'.format(nid=news['id'])
-                link.attrs['data-prevent-default'] = 'true'
+                if link.attrs['href'] == 'javascript:void();':
+                    link.attrs['href'] = '#{nid}'.format(nid=news['id'])
+                    link.attrs['data-prevent-default'] = 'true'
 
-            if file_extension in allowed_images_extension:
-                set_image( news, index, link.attrs['href'] )
-                link.attrs['href'] = set_image_link( news, index, link.attrs['href'] )
+                if file_extension in allowed_images_extension:
+                    set_image( news, index, link.attrs['href'] )
+                    link.attrs['href'] = set_image_link( news, index, link.attrs['href'] )
 
     if document.select('img'):
         for index, image in enumerate( document.select('img'), start=0 ):
