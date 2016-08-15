@@ -124,15 +124,15 @@ def get_content( news, content ):
                 set_image( news, index, image.attrs['src'] )
                 image.attrs['src'] = set_image_link( news, index, image.attrs['src'] )
 
-            for parent in image.parents:
-                if 'class' in parent.attrs:
-                    if 'coluna6' in parent.attrs['class']:
-                        responsive = False
-            if responsive:
-                if 'class' in image.attrs:
-                    image.attrs['class'].append('img-responsive')
-                else:
-                    image.attrs['class'] = 'img-responsive'
+            # for parent in image.parents:
+            #     if 'class' in parent.attrs:
+            #         if 'coluna6' in parent.attrs['class']:
+            #             responsive = False
+            # if responsive:
+            #     if 'class' in image.attrs:
+            #         image.attrs['class'].append('img-responsive')
+            #     else:
+            #         image.attrs['class'] = 'img-responsive'
 
     if document.select('.coluna6'):
         columns = document.select('.coluna6')
